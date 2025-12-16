@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --primary-color: #F6E7CA;
+  --lightbrown-color: #A28769;
+  --secondarybrown-color: #693422;
+  --darkbrown-color: #471A14;
+  --blackbrown-color: #290E0A;
+  --green-color: #3E3003;
+  --background: #F6E7CA;
+  --foreground: #F6E7CA;
+}
+
+@theme inline {
+  --color-primary: var(--primary-color);
+  --color-lightbrown: var(--lightbrown-color);
+  --color-secondarybrown: var(--secondarybrown-color);
+  --color-darkbrown: var(--darkbrown-color);
+  --color-blackbrown: var(--blackbrown-color);
+  --color-green: var(--green-color);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #471A14;
+    --foreground: #ededed;
+  }
+}
+
+.containerpadding {
+  @apply px-4 sm:px-6 lg:px-10 xl:px-20 2xl:px-20;
+}
+
+.title {
+  @apply text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold  leading-tight;
+}
+.subtitle {
+@apply text-xs sm:text-sm md:text-sm lg:text-sm xl:text-lg;
+}
+
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
