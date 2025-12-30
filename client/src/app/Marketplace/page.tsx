@@ -11,6 +11,8 @@ function MarketplaceContent() {
   const [chainId, setChainId] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
+  
+
   const formatAddress = (address: string) => {
     if (!address) return '';
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -49,8 +51,11 @@ function MarketplaceContent() {
             setWalletAddress(accounts[0]);
             setIsConnected(true);
           }
-        } catch (error) {
-          console.error('Error connecting wallet:', error);
+        } catch (error: any) {
+          // User rejection (4001) is expected behavior, not an error
+          if (error?.code !== 4001) {
+            console.error('Error connecting wallet:', error);
+          }
         }
       }
     }

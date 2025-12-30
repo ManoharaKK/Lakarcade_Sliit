@@ -4,12 +4,28 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { IoCartOutline } from "react-icons/io5"
 import { usePathname } from 'next/navigation'
+import { useWeb3 } from '../providers/web3'
+import { useAccount, useNetwork } from '../hooks/web3'
+import Walletbar from './Walletbar'
+
 
 function navbar() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  const { account } = useAccount();
+
+  console.log("Is Loading:", account.isLoading);
+  console.log("Is Installed:", account.isInstalled);
+
+  const { network } = useNetwork();
+
+  console.log(network.data)
+
+
   return (
+    <div>
+      
     <div className='fixed top-0 left-0 right-0 z-50'>
       <div className='bg-blackbrown p-2'>
         <div className='containerpadding container mx-auto'>
@@ -97,8 +113,23 @@ function navbar() {
                 Help
               </a>
             </div>
-            <div className='hidden lg:block'>
-              <button className='bg-[#693422] text-sm text-white px-4 py-1 hover:bg-[#693422]/90 transition-colors cursor-pointer'>Connect Wallet</button>
+            <div className='hidden lg:flex items-center gap-2'>
+            <div className="text-gray-300">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800">
+                    <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
+                      <circle cx={4} cy={4} r={3} />
+                    </svg>
+                    {network.data} ---
+                    {`Is supported: ${network.isSupported}`} ---
+                    Target: {network.targetNetwork}
+                  </span>
+                </div>
+              <Walletbar 
+                isLoading={account.isLoading}
+                isInstalled={account.isInstalled}
+                account={account.data || ''}
+                connect={account.connect}
+              />
             </div>
 
             {/* Mobile - Connect Wallet Button */}
@@ -182,15 +213,16 @@ function navbar() {
           {/* Desktop Layout */}
           <div className='hidden lg:flex justify-between items-center'>
             <div className='flex items-center gap-2'>
-              <div>
+              {/* <div>
                 <Image 
                   src='/images/LAKARCADelogo.png' 
                   alt='logo' 
                   width={30} 
                   height={30}
                   className="object-contain"
+                  style={{ height: 'auto' }}
                 />
-              </div>
+              </div> */}
               <div>
                 <p className='text-white text-sm font-bold'>LAKARCADE</p>
                 <p className='text-white text-sm'>Sri Lanka gift and receive</p>
@@ -234,15 +266,16 @@ function navbar() {
           <div className='lg:hidden'>
             <div className='flex justify-between items-center mb-3'>
               <div className='flex items-center gap-2'>
-                <div>
+                {/* <div>
                   <Image 
                     src='/images/LAKARCADelogo.png' 
                     alt='logo' 
                     width={25} 
                     height={25}
                     className="object-contain"
+                    style={{ height: 'auto' }}
                   />
-                </div>
+                </div> */}
                 <div>
                   <p className='text-white text-xs font-bold'>LAKARCADE</p>
                   <p className='text-white text-[10px]'>Sri Lanka gift and receive</p>
@@ -275,6 +308,7 @@ function navbar() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

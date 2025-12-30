@@ -1,10 +1,50 @@
+'use client'
+
 import React from 'react'
 import Navbar from '@/components/Navbar/navbar'
 import Cards from '@/components/NFT/cards'
 import metaData from '@/content/meta.json'
+import { useWeb3 } from '@/components/providers/web3';
+import { Web3Provider } from '@/providers';
 
+function PageContent() {
+  const { provider, contract } = useWeb3();
 
-function page() {
+  
+  const getNftInfo = async () => {
+    try {
+      const name = await contract!.name();
+      const symbol = await contract!.symbol();
+      console.log("NFT Name:", name);
+      console.log("NFT Symbol:", symbol);
+    } catch (error: any) {
+      if (error?.code === 'BAD_DATA' || error?.message?.includes('could not decode')) {
+        console.warn("Contract not deployed or invalid address");
+      } else {
+        console.error("Error fetching NFT info:", error);
+      }
+    }
+  }
+
+  if (contract) {
+    getNftInfo().catch(() => {}); // Prevent unhandled rejection
+  }
+
+  const getAccounts = async () => {
+    try {
+      const accounts = await provider!.listAccounts();
+      if (accounts.length > 0) {
+        console.log("Connected account:", accounts[0].address);
+      }
+    } catch (error) {
+      console.error("Error fetching accounts:", error);
+    }
+  }
+
+  if (provider) {
+    getAccounts().catch(() => {}); // Prevent unhandled rejection
+  }
+
   return (
     <div>
       <Navbar />
@@ -37,6 +77,14 @@ function page() {
         </div>
       </div>
     </div>
+  )
+}
+
+function page() {
+  return (
+    <Web3Provider>
+      <PageContent />
+    </Web3Provider>
   )
 }
 

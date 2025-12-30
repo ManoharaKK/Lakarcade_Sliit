@@ -6,16 +6,28 @@ import Button from '@/components/Home/Button'
 import Description from '@/components/Home/Description'
 import { useWeb3 } from '@/providers/web3'
 import { Web3Provider } from '@/providers'
-
+import Section2 from '@/components/Home/Section2'
+import Section4 from '@/components/Home/Section4'
+import Section5 from '@/components/Home/Section5'
+import Section6 from '@/components/Home/Section6'
+import Section7 from '@/components/Home/Section7'
+import Section8 from '@/components/Home/Section8'
+import Section9 from '@/components/Home/Section9'
+import Footer from '@/components/Footer/Footer'
+import Section3 from '@/components/Home/Section3'
 function PageContent() {
-  const { provider } = useWeb3();
+  const { contract, provider } = useWeb3();
+
+  console.log(contract);
 
   const getAccounts = async () => {
-    if (provider) {
-      const accounts = await provider.listAccounts();
-      console.log(accounts[0]);
-    }
+    const accounts = await provider!.listAccounts();
+    console.log(accounts[0]);
   }
+  if (provider) {
+    getAccounts();
+  }
+
 
   useEffect(() => {
     if (provider) {
@@ -35,8 +47,11 @@ function PageContent() {
             console.log("Wallet address:", accountArray[0]);
           }
         })
-        .catch((err) => {
-          console.error("User rejected request:", err);
+        .catch((err: any) => {
+          // User rejection (4001) is expected behavior, not an error
+          if (err?.code !== 4001) {
+            console.error("Error connecting wallet:", err);
+          }
         });
     } else {
       console.log("MetaMask is not installed");
@@ -47,9 +62,8 @@ function PageContent() {
 
 
   return (
-    <div className='bg-blackbrown'>
+    <div className=''>
       <Navbar />
-      
       <div className='bg-darkbrown mt-[170px] sm:mt-[150px] md:mt-[160px] xl:mt-[150px] min-h-screen xl:h-screen'>
         <div className='flex justify-between xl:h-full'>
           <div className='hidden xl:block relative w-[80px] h-full'>
@@ -168,13 +182,7 @@ function PageContent() {
               </div>
             </div>
             <div className='hidden xl:block relative w-full h-full'>
-              <Image
-                src='/images/Home/Mandana2.png'
-                alt='main image'
-                fill
-                sizes="(max-width: 1280px) 100vw, calc(100vw - 160px)"
-                className='object-contain object-bottom'
-              />
+             
             </div>
           </div>
           <div className='hidden xl:block  relative w-[80px] h-full'>
@@ -187,14 +195,16 @@ function PageContent() {
             />
           </div>
         </div>
-      </div>
-      <div className='bg-primary pt-20'>
-        <div className=' flex flex-col items-center justify-center'>
-          
-          <Description />
-        </div>
-      </div>
+      </div> 
+      <Section3 />
+      <Section4 />
+      <Section5 />
+      <Section6 />
+      <Section7 />
+      <Section8 />
+      <Section9 />
       
+      <Footer />
     </div>
   )
 }
