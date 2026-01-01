@@ -55,6 +55,7 @@
   --green-color: #3E3003;
   --background: #F6E7CA;
   --foreground: #F6E7CA;
+  --red-color: #B92024;
   --font-neutiva: 'Neutiva', Arial, Helvetica, sans-serif;
 }
 
@@ -105,6 +106,12 @@
 .title {
   @apply text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-3xl 2xl:text-3xl font-medium
 }
+.producttitle {
+  @apply text-3xl sm:text-4xl md:text-5xl lg:text-3xl xl:text-4xl 2xl:text-4xl font-medium
+}
+.productsubtitle {
+  @apply text-xl sm:text-2xl md:text-2xl lg:text-xl xl:text-xl 2xl:text-2xl ;
+}
 .subtitle {
   @apply text-lg sm:text-3xl md:text-4xl lg:text-xl xl:text-2xl 2xl:text-2xl  text-center;
 }
@@ -122,4 +129,79 @@ body {
 
 * {
   font-family: 'Neutiva', Arial, Helvetica, sans-serif;
+}
+
+/* Range Slider Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--secondarybrown-color);
+  cursor: pointer;
+  border: 2px solid var(--lightbrown-color);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--secondarybrown-color);
+  cursor: pointer;
+  border: 2px solid var(--lightbrown-color);
+  border: none;
+}
+
+input[type="range"]::-ms-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--secondarybrown-color);
+  cursor: pointer;
+  border: 2px solid var(--lightbrown-color);
+}
+
+/* Custom Checkbox Styling */
+input[type="checkbox"].custom-checkbox {
+  border-radius: 0 !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--lightbrown-color) !important;
+  border: 2px solid var(--lightbrown-color) !important;
+}
+
+input[type="checkbox"].custom-checkbox:checked {
+  background-color: var(--secondarybrown-color) !important;
+  border-color: var(--secondarybrown-color) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M10 3L4.5 8.5L2 6l1.5-1.5L4.5 6L8.5 2L10 3z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px 12px;
+}
+
+input[type="checkbox"].custom-checkbox:focus {
+  outline: 2px solid var(--secondarybrown-color);
+  outline-offset: 2px;
+}
+
+/* Hero Image Zoom In Animation */
+@keyframes zoomIn {
+  from {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.hero-zoom-in {
+  animation: zoomIn 5s ease-out;
+  will-change: transform;
 }

@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect } from 'react'
-import Navbar from '@/components/Navbar/navbar'
 import Image from 'next/image'
 import Button from '@/components/Home/Button'
 import Description from '@/components/Home/Description'
@@ -63,27 +62,12 @@ function PageContent() {
 
   return (
     <div className=''>
-      <Navbar />
-      <div className='bg-darkbrown mt-[170px] sm:mt-[150px] md:mt-[160px] xl:mt-[150px] min-h-screen xl:h-screen'>
-        <div className='flex justify-between xl:h-full'>
-          <div className='hidden xl:block relative w-[80px] h-full'>
-            <Image
-              src='/images/Home/Mandana.png'
-              alt='decoration'
-              fill
-              className='object-cover object-top'
-            />
-          </div>
-          <div className='relative flex-1 h-full'>
-            <div className='hidden xl:block'>
-              <Image
-                src='/images/Home/Mandana2.png'
-                alt='main image'
-                fill
-                className='object-contain object-top'
-              />
-            </div>
-            <div className='containerpadding container mx-auto mt-10 xl:mt-0 xl:h-screen flex items-center justify-center'>
+      <div className='bg-darkbrown min-h-screen'>
+        <div className='flex justify-between'>
+         
+          <div className='relative flex-1'>
+            
+            <div className='containerpadding container mx-auto mt-[188px] sm:mt-[190px] md:mt-[195px] lg:mt-[168px] xl:mt-[168px] py-10 xl:py-0 xl:h-[calc(100vh-168px)] flex items-center justify-center'>
               <div className='w-full h-[80vh] '>
                 <div className='grid grid-cols-1 xl:grid-cols-5 flex flex-col gap-4 h-full'>
                   <div className='col-span-3 flex flex-col gap-4 h-full'>
@@ -97,7 +81,7 @@ function PageContent() {
                         />
                       </div>
                       <div className='relative z-10'>
-                        <h1 className='title'>
+                        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-3xl 2xl:text-6xl font-medium'>
                           Own Authentic Sri Lankan Handicrafts with NFTs & NFC
                         </h1>
 
@@ -185,15 +169,7 @@ function PageContent() {
              
             </div>
           </div>
-          <div className='hidden xl:block  relative w-[80px] h-full'>
-            <Image
-              src='/images/Home/Mandana.png'
-              alt='decoration'
-              fill
-              sizes="80px"
-              className='object-cover object-top'
-            />
-          </div>
+        
         </div>
       </div> 
       <Section3 />

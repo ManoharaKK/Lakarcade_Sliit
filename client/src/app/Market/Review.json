@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "starCount": 5,
+    "profilePic": "/images/Review/Face.png",
+    "name": "Kavinda Manohara",
+    "description": "Such a cute candle that my friend (who I gifted this to) loved! It arrived so quickly too and the scent (festive spice) was so good! Highly recommend."
+  },
+  {
+    "id": 2,
+    "starCount": 5,
+    "profilePic": "/images/Review/Face.png",
+    "name": "Sarah Johnson",
+    "description": "Absolutely stunning craftsmanship! The detail is incredible and it arrived well-packaged. The quality exceeded my expectations and I'll definitely be ordering more items from LAKARCADE."
+  },
+  {
+    "id": 3,
+    "starCount": 4,
+    "profilePic": "/images/Review/Face.png",
+    "name": "Michael Chen",
+    "description": "Beautiful piece, authentic and well-made. Shipping took a bit longer than expected but worth the wait. The artisan story that came with it made it even more special."
+  },
+  {
+    "id": 4,
+    "starCount": 5,
+    "profilePic": "/images/Review/Face.png",
+    "name": "Emma Williams",
+    "description": "Perfect addition to my collection. The artisan story makes it even more special. Highly recommend! The attention to detail is remarkable and you can feel the tradition in every piece."
+  },
+  {
+    "id": 5,
+    "starCount": 5,
+    "profilePic": "/images/Review/Face.png",
+    "name": "David Brown",
+    "description": "Authentic and beautiful. The craftsmanship is exceptional. Perfect for my living room. It's clear that these are made with love and skill passed down through generations."
+  },
+  {
+    "id": 6,
+    "starCount": 4,
+    "profilePic": "/images/Review/Face.png",
+    "name": "Lisa Anderson",
+    "description": "Lovely piece, very well made. The colors are more vibrant than in the photos. Great customer service and fast delivery. I'm very happy with my purchase."
+  },
+  {
+    "id": 7,
+    "starCount": 5,
+    "profilePic": "/images/Review/Face.png",
+    "name": "James Wilson",
+    "description": "Exquisite craftsmanship! The lamp is beautiful and well-made. Great addition to my home. The quality is outstanding and I appreciate supporting local artisans."
+  },
+  {
+    "id": 8,
+    "starCount": 4,
+    "profilePic": "/images/Review/Face.png",
+    "name": "Maria Garcia",
+    "description": "Absolutely stunning! The quality is outstanding. Fast shipping and excellent packaging. I love knowing that my purchase supports traditional crafts and local communities."
+  }
+]
+

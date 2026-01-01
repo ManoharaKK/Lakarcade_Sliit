@@ -18,7 +18,7 @@ function Section4() {
             </div>
             <div className='bg-lightbrown w-full h-[1px] mt-[30px]'>
             </div>
-            <div className='grid grid-cols-1 xl:grid-cols-5  flex-col'>
+            <div className='grid grid-cols-1 xl:grid-cols-5'>
                 <div className='col-span-3 text-blackbrown text-xl font-bold mt-[20px] mb-[20px] flex flex-col'>
                     <div>
                         <h1 className='text-blackbrown title'>

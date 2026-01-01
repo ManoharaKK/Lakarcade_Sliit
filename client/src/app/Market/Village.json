@@ -1,0 +1,105 @@
+[
+  {
+    "id": 1,
+    "name": "Ambalangoda",
+    "region": "Southern Province",
+    "famousFor": "Traditional wooden mask carving and puppetry",
+    "location": {
+      "name": "Ambalangoda",
+      "image": "/images/Village/Map.png"
+    },
+    "description": [
+      "Ambalangoda, a coastal town in Sri Lanka's Southern Province, is world-famous for its traditional wooden mask carving and puppetry. For centuries, the villagers here have practiced the sacred art of creating masks used in rituals, healing ceremonies, and cultural dances such as Kolam and Sanni Yakuma.",
+      "The craft has been passed down through generations, with each mask carrying a unique design and story. The masks are made from locally sourced materials and are often used in traditional ceremonies and festivals. Master craftsmen spend weeks carving intricate details into each piece, ensuring that every mask tells a story of Sri Lankan folklore and tradition."
+    ],
+    "makingVideo": "/images/Village/Village.mp4",
+    "impactDescription": [
+      "Every purchase of this mask directly supports five artisan families in Ambalangoda, helping them sustain their livelihoods while preserving Sri Lanka's centuries-old mask-making traditions. Crafted with eco-friendly materials, each piece also contributes to protecting the environment through the use of natural wood and paints. The income generated from these sales allows artisans to continue their craft, pass their knowledge to the next generation, and maintain their cultural heritage.",
+      "Beyond economic support, these purchases help maintain the social fabric of the village. The mask-making tradition is not just a craft but a way of life that brings families together, creates employment opportunities, and keeps the community connected to its roots. By supporting these artisans, customers become part of a movement that values cultural preservation, sustainable practices, and the continuation of traditional knowledge that might otherwise be lost to modernization."
+    ],
+    "impactImages": [
+      "/images/Village/Village1.png",
+      "/images/Village/Village2.png",
+      "/images/Village/Village3.png"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Dumbara Valley",
+    "region": "Kandy District",
+    "famousFor": "Traditional handwoven Dumbara mats and textiles",
+    "location": {
+      "name": "Dumbara Valley",
+      "image": "/images/Village/Map.png"
+    },
+    "description": [
+      "Dumbara Valley, nestled in the Kandy District of Sri Lanka, is renowned for its unique handwoven textiles and mats. This ancient craft has been practiced for over 2,000 years, with techniques passed down through generations of weavers. The valley's distinct weaving tradition has been recognized as a UNESCO Intangible Cultural Heritage, highlighting its importance to Sri Lankan culture.",
+      "The Dumbara weaving technique is unique to this region and involves using natural fibers like hemp and cotton. The weavers create intricate geometric patterns that tell stories of local folklore, nature, and traditional beliefs. Each piece is meticulously handwoven on traditional looms, with some larger pieces taking up to three weeks to complete."
+    ],
+    "makingVideo": "/images/Village/Village.mp4",
+    "impactDescription": [
+      "Supporting Dumbara Valley weavers directly impacts the economic stability of over 200 families in the region. Each purchase helps these artisans maintain their traditional way of life while adapting to modern market demands. The income generated enables weavers to invest in better materials, improve their workshops, and provide education for their children, ensuring the craft continues for future generations.",
+      "The preservation of Dumbara weaving also contributes to environmental sustainability. The use of natural fibers and plant-based dyes promotes eco-friendly practices, while the traditional techniques require minimal energy consumption. By supporting these artisans, customers help maintain a sustainable craft that respects both cultural heritage and environmental conservation, creating a model for how traditional crafts can thrive in the modern world."
+    ],
+    "impactImages": [
+      "/images/Village/Village1.png",
+      "/images/Village/Village2.png",
+      "/images/Village/Village3.png"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Moratuwa",
+    "region": "Western Province",
+    "famousFor": "Handcrafted brass and metalwork",
+    "location": {
+      "name": "Moratuwa",
+      "image": "/images/Village/Map.png"
+    },
+    "description": [
+      "Moratuwa, located in the Western Province of Sri Lanka, is celebrated for its exceptional brass and metalwork craftsmanship. The town has been a center for metalworking for over four centuries, with artisans creating everything from traditional oil lamps and kitchenware to modern decorative items and jewelry. The metalworking tradition in Moratuwa is deeply rooted in the community, with skills passed down through generations of master craftsmen.",
+      "The artisans of Moratuwa use traditional techniques that have remained largely unchanged for centuries. They work with pure brass, copper, and other metals, shaping them using hand-beating methods, hammering, and polishing techniques that require years of practice to master. Each piece is individually crafted, ensuring that no two items are exactly alike, and the attention to detail is remarkable.",
+      "The metalworking process begins with selecting high-quality raw materials. The brass or copper is then heated and shaped using traditional tools and techniques. The artisans use hammers, anvils, and other hand tools to create intricate designs and patterns. The process requires patience, skill, and a deep understanding of the material's properties.",
+      "Once the basic shape is formed, the piece undergoes detailed work including engraving, embossing, and polishing. The artisans often incorporate traditional Sri Lankan motifs and patterns, such as lotus flowers, peacocks, and geometric designs. The final polishing stage brings out the natural beauty of the metal, creating pieces that are both functional and decorative.",
+      "The finished products from Moratuwa include traditional oil lamps used in temples and homes, kitchenware, decorative items, and modern jewelry. These pieces are not only beautiful but also durable, with many items lasting for generations. The craft has adapted to modern tastes while maintaining its traditional essence, making Moratuwa metalwork highly sought after both locally and internationally."
+    ],
+    "makingVideo": "/images/Village/Village.mp4",
+    "impactDescription": [
+      "Purchasing brass and metalwork from Moratuwa directly supports over 150 artisan families, providing them with sustainable livelihoods and helping preserve a craft that has been central to the town's identity for centuries. The income from these sales enables artisans to maintain their workshops, purchase quality materials, and train apprentices, ensuring the continuation of this traditional craft.",
+      "Beyond economic benefits, supporting Moratuwa metalworkers helps maintain a craft that is environmentally conscious. The artisans use traditional techniques that require minimal energy, and many pieces are made from recycled metals. The durability of these products means they last for generations, reducing waste and promoting sustainable consumption. By supporting these artisans, customers contribute to preserving both cultural heritage and environmental sustainability."
+    ],
+    "impactImages": [
+      "/images/Village/Village1.png",
+      "/images/Village/Village2.png",
+      "/images/Village/Village3.png"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Negombo",
+    "region": "Western Province",
+    "famousFor": "Hand-painted batik art and textiles",
+    "location": {
+      "name": "Negombo",
+      "image": "/images/Village/Map.png"
+    },
+    "description": [
+      "Negombo, a coastal city in the Western Province, is renowned for its vibrant batik art and textile production. The batik tradition in Negombo combines ancient techniques with contemporary designs, creating unique pieces that reflect both traditional Sri Lankan culture and modern artistic expression. The city's batik artists are known for their skill in creating intricate patterns using wax resist and natural dyes.",
+      "The batik-making process is a labor-intensive art form that requires patience and precision. Artists begin by drawing designs on fabric using a canting tool, which applies hot wax to create patterns. The wax acts as a resist, preventing the dye from coloring certain areas of the fabric. This process is repeated multiple times with different colors, creating layered and complex designs that are characteristic of high-quality batik work.",
+      "The artists of Negombo use natural dyes derived from plants, roots, and other organic materials, creating a wide range of colors that are both vibrant and environmentally friendly. The traditional color palette includes deep blues, rich reds, warm yellows, and earthy browns, each with its own cultural significance. Modern artists have expanded this palette while maintaining the use of natural materials.",
+      "Each batik piece is unique, reflecting the individual artist's style and creativity. The designs often incorporate traditional Sri Lankan motifs such as elephants, peacocks, lotus flowers, and geometric patterns, as well as contemporary abstract designs. The finished products include wall hangings, clothing, cushion covers, table linens, and decorative items that are both functional and artistic.",
+      "The batik industry in Negombo has evolved over time, with artists adapting traditional techniques to meet modern market demands. While maintaining the core principles of the craft, contemporary batik artists experiment with new designs, color combinations, and applications. This evolution ensures that the craft remains relevant and appealing to both local and international customers, while preserving the essential techniques and cultural significance of traditional batik art."
+    ],
+    "makingVideo": "/images/Village/Village.mp4",
+    "impactDescription": [
+      "Supporting Negombo's batik artists directly benefits over 100 artisan families, providing them with sustainable income and helping preserve a craft that is integral to the region's cultural identity. The revenue from batik sales enables artists to purchase quality materials, maintain their studios, and continue creating beautiful pieces that celebrate Sri Lankan culture. This support is crucial for keeping the traditional batik techniques alive and passing them on to future generations.",
+      "The batik craft in Negombo also promotes environmental sustainability through the use of natural dyes and organic materials. The traditional techniques are eco-friendly, requiring minimal energy and producing little waste. By supporting these artists, customers contribute to a sustainable craft that respects both cultural heritage and environmental conservation, creating a positive impact that extends beyond the individual purchase to benefit the entire community and the environment."
+    ],
+    "impactImages": [
+      "/images/Village/Village1.png",
+      "/images/Village/Village2.png",
+      "/images/Village/Village3.png"
+    ]
+  }
+]
+
