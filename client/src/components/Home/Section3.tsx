@@ -4,7 +4,7 @@ function Section3() {
     return (
         <div className='containerpadding container mx-auto'>
 
-<div className='w-full relative mb-5' style={{ height: 'auto' }}>
+            <div className='w-full relative mb-5' style={{ height: 'auto' }}>
                 <Image
                     src='/images/Home/Line.svg'
                     alt='section2'
@@ -44,8 +44,18 @@ function Section3() {
                     </p>
                     <div className='bg-lightbrown w-full h-[1px] mb-4'>
                     </div>
-                    <div>
-                        <Image src='/images/Home/Video.png' alt='section2' width={8914} height={459} className='w-full h-auto px-2' />
+                    <div className='px-2'>
+                        <video 
+                            src='/images/Home/Video.mp4' 
+                            className='w-full h-auto' 
+                            controls
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                        >
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                     <div className='bg-lightbrown w-full h-[1px] mt-4'>
                     </div>

@@ -22,14 +22,14 @@ function Section9() {
                 <Image src='/images/Home/Mandanafooter.png' alt='icon' width={300} height={300} className='hidden lg:block w-auto h-full object-contain max-w-[80px] lg:max-w-[150px] xl:max-w-[200px] 2xl:max-w-[200px]' />
                 <div className='w-full max-w-[90%] sm:max-w-[85%] md:max-w-[80%] lg:max-w-[60%] xl:max-w-[60%] 2xl:max-w-[60%] px-2 sm:px-4 md:px-6 lg:px-0'>
                     <h1 className='text-blackbrown subtitle text-center mb-4 sm:mb-5 md:mb-6 lg:mb-6 xl:mb-7 2xl:mb-8'>
-                        Where Tradition Meets Tomorrow
-                    </h1>
+                Where Tradition Meets Tomorrow
+            </h1>
                     <p className='text-blackbrown description text-center text-sm sm:text-base md:text-base lg:text-base xl:text-lg 2xl:text-lg'>
                         From the mask carvers of Ambalangoda to the weavers of Dumbara, every product we showcase carries the story of its maker and the culture of their village. We work directly with artisans and families who have mastered their craft through generations, ensuring that every purchase supports their livelihood, strengthens rural economies, and keeps Sri Lanka's cultural heritage alive.
-                        <br />
-                        <br />
-                        We are also deeply committed to sustainability and authenticity. All our handicrafts are made using eco-friendly natural materials, each product verified with QR/NFC tracking to guarantee originality and artisan recognition. With every item you purchase, you become part of a global community that values tradition, creativity, and conscious living.
-                    </p>
+                    <br />
+                    <br />
+                    We are also deeply committed to sustainability and authenticity. All our handicrafts are made using eco-friendly natural materials, each product verified with QR/NFC tracking to guarantee originality and artisan recognition. With every item you purchase, you become part of a global community that values tradition, creativity, and conscious living.
+                </p>
                 </div>
                 <Image src='/images/Home/Mandanafooter.png' alt='icon' width={300} height={300} className='hidden lg:block w-auto h-full object-contain max-w-[80px] lg:max-w-[150px] xl:max-w-[200px] 2xl:max-w-[200px]' />
             </div>
