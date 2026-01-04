@@ -6,11 +6,11 @@ import Section9 from '../../components/Home/Section9'
 import Footer from '../../components/Footer/Footer'
 
 function Page() {
-  const [selectedCategory, setSelectedCategory] = useState('Textiles & Fabric')
-  const [selectedSize, setSelectedSize] = useState('10 cm – 20 cm')
-  const [selectedWeight, setSelectedWeight] = useState('Medium Weight (500g – 2kg)')
-  const [minPrice, setMinPrice] = useState('50')
-  const [maxPrice, setMaxPrice] = useState('200')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedSize, setSelectedSize] = useState('')
+  const [selectedWeight, setSelectedWeight] = useState('')
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
   const [branches, setBranches] = useState<string[]>([])
   const [materials, setMaterials] = useState<string[]>([])
   const [ratings, setRatings] = useState<string[]>([])
@@ -148,7 +148,7 @@ function Page() {
                                     type='range'
                                     min='0'
                                     max='500'
-                                    value={minPrice}
+                                    value={minPrice || '0'}
                                     onChange={(e) => setMinPrice(e.target.value)}
                                     className='w-full h-2 bg-lightbrown rounded-lg appearance-none cursor-pointer accent-secondarybrown'
                                 />
@@ -156,8 +156,9 @@ function Page() {
                             <div className='flex items-center gap-2 mb-3'>
                                 <input
                                     type='text'
-                                    value={`$${minPrice}`}
+                                    value={minPrice ? `$${minPrice}` : ''}
                                     onChange={(e) => setMinPrice(e.target.value.replace('$', ''))}
+                                    placeholder='Min'
                                     className='w-20 px-2 py-1 text-sm border border-lightbrown rounded bg-primary text-blackbrown'
                                 />
                                 <svg className='w-5 h-5 text-secondarybrown' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -165,8 +166,9 @@ function Page() {
                                 </svg>
                                 <input
                                     type='text'
-                                    value={`$${maxPrice}`}
+                                    value={maxPrice ? `$${maxPrice}` : ''}
                                     onChange={(e) => setMaxPrice(e.target.value.replace('$', ''))}
+                                    placeholder='Max'
                                     className='w-20 px-2 py-1 text-sm border border-lightbrown rounded bg-primary text-blackbrown'
                                 />
                             </div>
@@ -289,7 +291,16 @@ function Page() {
                             <Image src='/images/MarketPlace/H4.png' alt='mask4' width={500} height={500} className='w-full h-full object-cover' /> 
                         </div>
                     </div>
-                    <Product />
+                    <Product 
+                        selectedCategory={selectedCategory}
+                        selectedSize={selectedSize}
+                        selectedWeight={selectedWeight}
+                        minPrice={minPrice}
+                        maxPrice={maxPrice}
+                        branches={branches}
+                        materials={materials}
+                        ratings={ratings}
+                    />
                     
                 </div>
             </div>

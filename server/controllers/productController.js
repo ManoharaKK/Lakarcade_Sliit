@@ -27,10 +27,19 @@ exports.createProduct = async (req, res) => {
     });
   } catch (error) {
     console.error('Create Product error:', error);
+    // Return validation errors with more detail
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.values(error.errors).map((err) => err.message).join(', ');
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        error: validationErrors
+      });
+    }
     res.status(500).json({
       success: false,
       message: 'Failed to create Product',
-      error: error.message
+      error: error.message || error.toString()
     });
   }
 };

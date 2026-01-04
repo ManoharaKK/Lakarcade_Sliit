@@ -6,4 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract NftMarket is ERC721URIStorage {
     constructor() ERC721("Creatures NFT", "CNFT") {}
 }
-// jdjd
+
+// Creates NFTs for products
+// Stores ownership on blockchain
+// Supports NFT resale and verification

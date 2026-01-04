@@ -3,50 +3,39 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import productData from '../product.json'
 import Village from '../Village'
 import Footer from '../../../components/Footer/Footer'
 import Section9 from '../../../components/Home/Section9'
 
     
 interface Product {
-    id: number
-    viewCount: number
+    _id: string
+    id: string
+    viewCount?: number
     title: string
-    subtitle: string
+    subtitle?: string
     price: number
-    earlyPrice: number
-    discountPercentage: number
-    salesEndDate: string
-    localTaxesIncluded: boolean
-    material: string
-    dimensions: {
+    earlyPrice?: number
+    discountPercentage?: number
+    salesEndDate?: string
+    localTaxesIncluded?: string | boolean
+    material?: string
+    dimensions?: string | {
         length: string
         width: string
         height: string
     }
-    weight: string
-    color: string
-    craftTechnique: string
-    origin: string
-    authenticity: string
-    careInstruction: string | string[]
-    shipping: string
-    returnsDescription: string
+    weight?: string
+    color?: string
+    craftTechnique?: string
+    origin?: string
+    authenticity?: string
+    careInstruction?: string | string[]
+    shipping?: string
+    returnsDescription?: string
     images: string[]
-    artisanStory: string
-    selectVillage: string
-    review: {
-        averageRating: number
-        totalReviews: number
-        reviews: Array<{
-            id: number
-            userName: string
-            rating: number
-            comment: string
-            date: string
-        }>
-    }
+    artisanStory?: string
+    selectVillage?: string
 }
 
 export default function ProductDetailPage() {
@@ -54,14 +43,54 @@ export default function ProductDetailPage() {
     const router = useRouter()
     const [product, setProduct] = useState<Product | null>(null)
     const [selectedImage, setSelectedImage] = useState(0)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const productId = parseInt(params.id as string)
-        const foundProduct = (productData as Product[]).find(p => p.id === productId)
-        if (foundProduct) {
-            setProduct(foundProduct)
-        }
+        fetchProduct()
     }, [params.id])
+
+    const fetchProduct = async () => {
+        try {
+            setLoading(true)
+            const productId = params.id as string
+            const response = await fetch(`http://localhost:4000/api/products/${productId}`)
+            if (response.ok) {
+                const data = await response.json()
+                if (data.success && data.data) {
+                    setProduct(data.data)
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching product:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // Parse dimensions string into object
+    const parseDimensions = (dimensions: string | { length: string; width: string; height: string } | undefined) => {
+        if (!dimensions) return { length: '', width: '', height: '' }
+        if (typeof dimensions === 'object') return dimensions
+        
+        // Try to parse formats like "20cm x 15cm x 10cm" or "20 x 15 x 10 cm"
+        const patterns = [
+            /(\d+(?:\.\d+)?)\s*(?:cm|m|in|ft)?\s*x\s*(\d+(?:\.\d+)?)\s*(?:cm|m|in|ft)?\s*x\s*(\d+(?:\.\d+)?)\s*(?:cm|m|in|ft)?/i,
+            /(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)/i
+        ]
+        
+        for (const pattern of patterns) {
+            const match = dimensions.match(pattern)
+            if (match) {
+                return {
+                    length: match[1] || '',
+                    width: match[2] || '',
+                    height: match[3] || ''
+                }
+            }
+        }
+        
+        return { length: '', width: '', height: '' }
+    }
 
     const renderStars = (count: number) => {
         return (
@@ -71,6 +100,14 @@ export default function ProductDetailPage() {
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                 ))}
+            </div>
+        )
+    }
+
+    if (loading) {
+        return (
+            <div className='containerpadding container mx-auto mt-[188px] sm:mt-[190px] md:mt-[195px] lg:mt-[168px] xl:mt-[168px] py-10'>
+                <p className='text-center text-blackbrown'>Loading product...</p>
             </div>
         )
     }
@@ -85,6 +122,8 @@ export default function ProductDetailPage() {
             </div>
         )
     }
+
+    const dimensions = parseDimensions(product.dimensions)
 
     return (
         <div>
@@ -103,47 +142,55 @@ export default function ProductDetailPage() {
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
                 {/* Left Column - Images */}
                 <div className='flex flex-col lg:sticky lg:top-[188px] lg:self-start lg:border-r lg:border-lightbrown lg:pr-8'>
-                    <div className='grid grid-cols-3 gap-2 mb-2'>
-                        {/* Main Large Image - Shows Selected Image */}
-                        <div className='col-span-3 border border-[#463e20] bg-[#63541F] relative aspect-square overflow-hidden'>
-                            <Image
-                                src={product.images[selectedImage] || product.images[0]}
-                                alt={`${product.title} - Main`}
-                                fill
-                                sizes="(max-width: 1024px) 100vw, 66vw"
-                                className='object-cover'
-                            />
-                        </div>
-                        {/* Second Image */}
-                        
-                    </div>
-
-                    {/* Thumbnail Grid */}
-                    <div className='grid grid-cols-4 gap-2'>
-                        {product.images.slice(2, 6).map((image, index) => (
-                            <div 
-                                key={index + 2} 
-                                className='col-span-1 border border-[#463e20] relative aspect-square overflow-hidden'
-                            >
-                                <Image
-                                    src={image || product.images[0]}
-                                    alt={`${product.title} - ${index + 3}`}
-                                    fill
-                                    sizes="(max-width: 1024px) 25vw, 16vw"
-                                    className='object-cover cursor-pointer hover:opacity-80 transition-opacity'
-                                    onClick={() => setSelectedImage(index + 2)}
-                                />
+                    {product.images && product.images.length > 0 && (
+                        <>
+                            <div className='grid grid-cols-3 gap-2 mb-2'>
+                                {/* Main Large Image - Shows Selected Image */}
+                                <div className='col-span-3 border border-[#463e20] bg-[#63541F] relative aspect-square overflow-hidden'>
+                                    <Image
+                                        src={product.images[selectedImage] || product.images[0]}
+                                        alt={`${product.title} - Main`}
+                                        fill
+                                        sizes="(max-width: 1024px) 100vw, 66vw"
+                                        className='object-cover'
+                                    />
+                                </div>
                             </div>
-                        ))}
-                    </div>
+
+                            {/* Thumbnail Grid */}
+                            {product.images.length > 1 && (
+                                <div className='grid grid-cols-4 gap-2'>
+                                    {product.images.slice(1, 5).map((image, index) => (
+                                        <div 
+                                            key={index + 1} 
+                                            className='col-span-1 border border-[#463e20] relative aspect-square overflow-hidden'
+                                        >
+                                            <Image
+                                                src={image || product.images[0]}
+                                                alt={`${product.title} - ${index + 2}`}
+                                                fill
+                                                sizes="(max-width: 1024px) 25vw, 16vw"
+                                                className='object-cover cursor-pointer hover:opacity-80 transition-opacity'
+                                                onClick={() => setSelectedImage(index + 1)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
                 {/* Right Column - Product Details */}
                 <div className='lg:pr-2'>
-                <p className='text-blackbrown text-sm '>
+                {product.viewCount && (
+                    <p className='text-blackbrown text-sm '>
                         <span className=''>{product.viewCount}<span className='text-secondarybrown font-regular'>+ View in the last <span className='text-[#B92024]'>24 hours</span></span></span>
                     </p>
+                )}
                     <h1 className='text-blackbrown producttitle mb-2'>{product.title}</h1>
-                    <p className='text-blackbrown productsubtitle mb-4'>{product.subtitle}</p>
+                    {product.subtitle && (
+                        <p className='text-blackbrown productsubtitle mb-4'>{product.subtitle}</p>
+                    )}
 
 
                     {/* Price Section */}
@@ -152,17 +199,24 @@ export default function ProductDetailPage() {
                             <div>
                                 <p className='text-3xl sm:text-4xl md:text-5xl lg:text-3xl xl:text-4xl 2xl:text-6xl mt-4 text-[#B92024]'>${product.price.toFixed(2)}</p>
                             </div>
-                            <div>
-                                <p className='text-blackbrown text-xl line-through opacity-70'>
-                                    ${product.earlyPrice.toFixed(2)}
-                                </p>
-                            </div>
-                            {product.discountPercentage > 0 && (
+                            {product.earlyPrice && (
+                                <div>
+                                    <p className='text-blackbrown text-xl line-through opacity-70'>
+                                        ${product.earlyPrice.toFixed(2)}
+                                    </p>
+                                </div>
+                            )}
+                            {product.discountPercentage && product.discountPercentage > 0 && (
                                 <div className='bg-[#6A642D] text-primary px-3 py-1'>
                                     <p className='font-semibold'>{product.discountPercentage}% OFF</p>
                                 </div>
                             )}
                         </div>
+                        {product.earlyPrice && (
+                            <p className='text-blackbrown text-sm line-through opacity-70 mb-2'>
+                                Early Price: ${product.earlyPrice.toFixed(2)}
+                            </p>
+                        )}
                         {product.localTaxesIncluded && (
                             <p className='text-blackbrown description mb-4'>Local taxes included</p>
                         )}
@@ -171,58 +225,72 @@ export default function ProductDetailPage() {
 
                     {/* Product Information */}
                     <div className='mb-6'>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Material : <span className='text-secondarybrown font-normal'>{product.material}</span></h3>
-                            
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Dimensions : <span className='text-secondarybrown font-normal'>{product.dimensions.length} × {product.dimensions.width} × {product.dimensions.height}</span></h3>
-                            
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Weight : <span className='text-secondarybrown font-normal'>{product.weight}</span></h3>
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Color : <span className='text-secondarybrown font-normal'>{product.color}</span></h3>
-                            
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Craft Technique : <span className='text-secondarybrown font-normal'>{product.craftTechnique}</span></h3>
-                            
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Origin : <span className='text-secondarybrown font-normal'>{product.origin}</span></h3>
-                            
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Authenticity : <span className='text-secondarybrown font-normal'>{product.authenticity}</span></h3>
-                            
-                        </div>
-                        <div className='mt-4'>
-                    <h2 className='text-blackbrown'>Care Instructions:</h2>
-                    <ul className='text-blackbrown description pl-6 space-y-2 list-none'>
-                        {(Array.isArray(product.careInstruction) 
-                            ? product.careInstruction 
-                            : (product.careInstruction || '').split('\n')
-                        ).filter(line => line && line.trim()).map((instruction, index) => (
-                            <li key={index} className='mb-2 flex items-start'>
-                                <span className='inline-block w-2 h-2 rounded-full bg-blackbrown mr-3 mt-2 flex-shrink-0'></span>
-                                <span>{String(instruction).replace(/^•\s*/, '')}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                        <div className='mt-4'>
-                            <h3 className='text-blackbrown font-bold'>Shipping : <span className='text-secondarybrown font-normal'>{product.shipping}</span></h3>
-                            
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Returns : <span className='text-secondarybrown font-normal'>{product.returnsDescription}</span></h3>
-                        </div>
-                        <div>
-                            <h3 className='text-blackbrown font-bold'>Village : <span className='text-secondarybrown font-normal'>{product.selectVillage}</span></h3>
-                            
-                        </div>
+                        {product.material && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Material : <span className='text-secondarybrown font-normal'>{product.material}</span></h3>
+                            </div>
+                        )}
+                        {dimensions.length && dimensions.width && dimensions.height && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Dimensions : <span className='text-secondarybrown font-normal'>{dimensions.length} × {dimensions.width} × {dimensions.height}</span></h3>
+                            </div>
+                        )}
+                        {product.weight && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Weight : <span className='text-secondarybrown font-normal'>{product.weight}</span></h3>
+                            </div>
+                        )}
+                        {product.color && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Color : <span className='text-secondarybrown font-normal'>{product.color}</span></h3>
+                            </div>
+                        )}
+                        {product.craftTechnique && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Craft Technique : <span className='text-secondarybrown font-normal'>{product.craftTechnique}</span></h3>
+                            </div>
+                        )}
+                        {product.origin && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Origin : <span className='text-secondarybrown font-normal'>{product.origin}</span></h3>
+                            </div>
+                        )}
+                        {product.authenticity && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Authenticity : <span className='text-secondarybrown font-normal'>{product.authenticity}</span></h3>
+                            </div>
+                        )}
+                        {product.careInstruction && (
+                            <div className='mt-4'>
+                                <h2 className='text-blackbrown'>Care Instructions:</h2>
+                                <ul className='text-blackbrown description pl-6 space-y-2 list-none'>
+                                    {(Array.isArray(product.careInstruction) 
+                                        ? product.careInstruction 
+                                        : (product.careInstruction || '').split('\n')
+                                    ).filter(line => line && line.trim()).map((instruction, index) => (
+                                        <li key={index} className='mb-2 flex items-start'>
+                                            <span className='inline-block w-2 h-2 rounded-full bg-blackbrown mr-3 mt-2 flex-shrink-0'></span>
+                                            <span>{String(instruction).replace(/^•\s*/, '')}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        {product.shipping && (
+                            <div className='mt-4'>
+                                <h3 className='text-blackbrown font-bold'>Shipping : <span className='text-secondarybrown font-normal'>{product.shipping}</span></h3>
+                            </div>
+                        )}
+                        {product.returnsDescription && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Returns : <span className='text-secondarybrown font-normal'>{product.returnsDescription}</span></h3>
+                            </div>
+                        )}
+                        {product.selectVillage && (
+                            <div>
+                                <h3 className='text-blackbrown font-bold'>Village : <span className='text-secondarybrown font-normal'>{product.selectVillage}</span></h3>
+                            </div>
+                        )}
                     </div>
                     <div className='flex flex-col gap-2'>
                             <button className='w-full bg-secondarybrown text-primary py-3 px-6  hover:bg-secondarybrown/90 transition-colors font-semibold'>
@@ -241,10 +309,12 @@ export default function ProductDetailPage() {
             {/* Additional Sections */}
             <div className='mt-5 space-y-4'>
                 {/* Artisan Story */}
-                <div className=''>
-                    <h2 className='text-blackbrown title mb-4'>Artisan Story</h2>
-                    <p className='text-blackbrown description'>{product.artisanStory}</p>
-                </div>
+                {product.artisanStory && (
+                    <div className=''>
+                        <h2 className='text-blackbrown title mb-4'>Artisan Story</h2>
+                        <p className='text-blackbrown description'>{product.artisanStory}</p>
+                    </div>
+                )}
                 <div className='bg-lightbrown w-full h-[1px] mt-5'>
                 </div>
                 <div className='w-full relative ' style={{ height: 'auto' }}>
@@ -258,7 +328,9 @@ export default function ProductDetailPage() {
                 />
             </div>
                 
-                <Village villageName={product.selectVillage} />
+                {product.selectVillage && (
+                    <Village villageName={product.selectVillage} />
+                )}
                 
                 
             </div>

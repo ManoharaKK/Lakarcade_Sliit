@@ -1986,12 +1986,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x34F9C7b9691DE4DeBAf5eCf65E5908A368741AF4",
-      "transactionHash": "0x69705312c99ec066cd3bad435e97c5bdb1673d58272e2ee4a789f5e6e4075491"
+      "address": "0x38DD8679CA19572fB7594cEa2ECD3bbe1af55cd9",
+      "transactionHash": "0x26d3db00531d5f086ff3cd901aaba455add5e1264dffad604261ccfaafb17075"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-12-20T08:41:17.736Z",
+  "updatedAt": "2026-01-03T19:41:10.498Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

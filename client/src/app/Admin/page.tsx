@@ -9,10 +9,10 @@ function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('nft-product')
 
   const menuItems = [
-    { id: 'nft-product', label: 'NFT Product', icon: '🎨' },
-    { id: 'normal-product', label: 'Normal Product', icon: '📦' },
-    { id: 'village-data', label: 'Village Data', icon: '🏘️' },
-    { id: 'artisans-data', label: 'Artisans Data', icon: '👨‍🎨' }
+    { id: 'nft-product', label: 'NFT Product' },
+    { id: 'normal-product', label: 'Normal Product' },
+    { id: 'village-data', label: 'Village Data' },
+    { id: 'artisans-data', label: 'Artisans Data' }
   ]
 
   const renderContent = () => {
@@ -42,13 +42,12 @@ function AdminDashboard() {
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`w-full text-left px-4 py-3 rounded transition-colors flex items-center gap-3 ${
+                  className={`w-full text-left px-4 py-3 rounded transition-colors ${
                     activeSection === item.id
                       ? 'bg-secondarybrown text-primary'
                       : 'text-primary hover:bg-lightbrown/30'
                   }`}
                 >
-                  <span className='text-xl'>{item.icon}</span>
                   <span className='text-sm font-medium'>{item.label}</span>
                 </button>
               ))}

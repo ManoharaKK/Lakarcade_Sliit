@@ -20,10 +20,21 @@ const productSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  category: {
+    type: String,
+    trim: true,
+    enum: ['Wooden Crafts', 'Textiles & Fabric', 'Ceramics & Pottery', 'Jewelry & Accessories', 'Home & Living']
+  },
+  branches: {
+    type: String,
+    trim: true,
+    enum: ['One Galle face', 'Colombo City Centre Mall', 'Canowin Arcade B', 'Port city Downtown', 'Shangri-La Hambantota']
+  },
   price: {
     type: Number,
-    required: [true, 'Price is required'],
-    min: [0, 'Price must be positive']
+    required: false,
+    min: [0, 'Price must be positive'],
+    default: 0
   },
   earlyPrice: {
     type: Number,
@@ -38,8 +49,8 @@ const productSchema = new mongoose.Schema({
     type: Date
   },
   localTaxesIncluded: {
-    type: Boolean,
-    default: false
+    type: String,
+    default: null
   },
   material: {
     type: String,
