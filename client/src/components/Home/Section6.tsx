@@ -21,7 +21,7 @@ function Section6() {
                         className='w-full h-auto mt-5'
                     />
                     <p className='description text-blackbrown  mt-5 mb-5 '>
-                    Sri Lankan’s traditional masks are world-renowned for their mystical beauty and cultural significance. Whether used in rituals, dance performances, or as wall décor, these masks embody folklore, spirituality, and protection. Hand-carved from light wood and painted with vivid natural colors, they represent characters from myths and legends, making them powerful symbols of Sri Lankan identity. Our collection also features other cultural art forms that bring heritage to life.
+                        Sri Lankan’s traditional masks are world-renowned for their mystical beauty and cultural significance. Whether used in rituals, dance performances, or as wall décor, these masks embody folklore, spirituality, and protection. Hand-carved from light wood and painted with vivid natural colors, they represent characters from myths and legends, making them powerful symbols of Sri Lankan identity. Our collection also features other cultural art forms that bring heritage to life.
                     </p>
                 </div>
                 <div className='lg:pl-6'>
@@ -32,8 +32,8 @@ function Section6() {
                     </h1>
                     <div className='bg-lightbrown w-full h-[1px]'>
                     </div>
-                    <p className='description text-blackbrown  mt-5'> 
-                    Sustainability meets creativity in our eco-friendly crafts collection. Featuring products made from recycled, upcycled, and natural materials like coconut shells, bamboo, palm leaves, and jute, these crafts support both the environment and local communities. From household décor to everyday essentials, each item proves that beauty and responsibility can coexist. By choosing these crafts, you’re making a positive impact while owning a piece of ethical artistry.
+                    <p className='description text-blackbrown  mt-5'>
+                        Sustainability meets creativity in our eco-friendly crafts collection. Featuring products made from recycled, upcycled, and natural materials like coconut shells, bamboo, palm leaves, and jute, these crafts support both the environment and local communities. From household décor to everyday essentials, each item proves that beauty and responsibility can coexist. By choosing these crafts, you’re making a positive impact while owning a piece of ethical artistry.
                     </p>
                     <Image
                         src='/images/Home/Eco.png'
@@ -45,7 +45,7 @@ function Section6() {
                 </div>
             </div>
             <div className='bg-lightbrown w-full h-[1px]'>
-                    </div>
+            </div>
             <div className='w-full relative mb-5' style={{ height: 'auto' }}>
                 <Image
                     src='/images/Home/Line.svg'

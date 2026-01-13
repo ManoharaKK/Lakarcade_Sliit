@@ -1,8 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Navbar from '@/components/Navbar/navbar'
-import { useWeb3 } from '@/providers/web3'
-import { Web3Provider } from '@/providers'
+import { useWeb3 } from '@/components/providers/web3'
 
 function MarketplaceContent() {
   const { provider, ethereum } = useWeb3();
@@ -137,12 +136,6 @@ function MarketplaceContent() {
   )
 }
 
-function page() {
-  return (
-    <Web3Provider>
-      <MarketplaceContent />
-    </Web3Provider>
-  )
+export default function page() {
+  return <MarketplaceContent />
 }
-
-export default page

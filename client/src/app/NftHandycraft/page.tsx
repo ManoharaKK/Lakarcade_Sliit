@@ -5,7 +5,6 @@ import Navbar from '@/components/Navbar/navbar'
 import Cards from '@/components/NFT/cards'
 import metaData from '@/content/meta.json'
 import { useWeb3 } from '@/components/providers/web3';
-import { Web3Provider } from '@/providers';
 
 function PageContent() {
   const { provider, contract } = useWeb3();
@@ -80,13 +79,7 @@ function PageContent() {
   )
 }
 
-function page() {
-  return (
-    <Web3Provider>
-      <PageContent />
-    </Web3Provider>
-  )
+export default function page() {
+  return <PageContent />
 }
-
-export default page
 

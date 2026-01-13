@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Navbar from '@/components/Navbar/navbar'
 import NFTForm from '@/components/NFT/NFTForm'
 import SimpleNFTForm from '@/components/NFT/SimpleNFTForm'
-
+import QRcode from '@/components/QR/QRcode'
 function page() {
   const [formType, setFormType] = useState('full')
 
@@ -74,6 +74,7 @@ function page() {
           </div>
         )}
       </div>
+      <QRcode />
     </div>
   )
 }

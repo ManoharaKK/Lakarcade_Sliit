@@ -65,6 +65,12 @@ function navbar() {
                 Home
               </a>
               <a
+                href="/Market"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Market' ? 'underline font-semibold' : ''}`}
+              >
+                Market
+              </a>
+              <a
                 href="/Marketplace"
                 className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Marketplace' ? 'underline font-semibold' : ''}`}
               >
@@ -75,6 +81,12 @@ function navbar() {
                 className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/NftHandycraft' ? 'underline font-semibold' : ''}`}
               >
                 NFT Handycraft
+              </a>
+              <a
+                href="/NFTMarket"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/NFTMarket' ? 'underline font-semibold' : ''}`}
+              >
+                NFT Market
               </a>
               <a
                 href="/Artisans"
@@ -89,29 +101,12 @@ function navbar() {
                 Virtual Museum
               </a>
               <a
-                href="/Verify"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Verify' ? 'underline font-semibold' : ''}`}
+                href="/Admin"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Admin' ? 'underline font-semibold' : ''}`}
               >
-                Verify
+                Admin
               </a>
-              <a
-                href="/Learn"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Learn' ? 'underline font-semibold' : ''}`}
-              >
-                Learn
-              </a>
-              <a
-                href="/Festivals"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Festivals' ? 'underline font-semibold' : ''}`}
-              >
-                Festivals
-              </a>
-              <a
-                href="/Help"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Help' ? 'underline font-semibold' : ''}`}
-              >
-                Help
-              </a>
+           
             </div>
             <div className='hidden lg:flex items-center gap-2'>
             <div className="text-gray-300">
@@ -132,6 +127,11 @@ function navbar() {
               />
             </div>
 
+
+
+
+            
+
             {/* Mobile - Connect Wallet Button */}
             <div className='lg:hidden'>
               <button className='bg-[#693422] text-xs text-white px-3 py-1 hover:bg-[#693422]/90 transition-colors cursor-pointer'>Connect</button>
@@ -149,6 +149,13 @@ function navbar() {
                 Home
               </a>
               <a
+                href="/Market"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Market' ? 'underline font-semibold' : ''}`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Market
+              </a>
+              <a
                 href="/Marketplace"
                 className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Marketplace' ? 'underline font-semibold' : ''}`}
                 onClick={() => setMobileMenuOpen(false)}
@@ -161,6 +168,13 @@ function navbar() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 NFT Handycraft
+              </a>
+              <a
+                href="/NFTMarket"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/NFTMarket' ? 'underline font-semibold' : ''}`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                NFT Market
               </a>
               <a
                 href="/Artisans"
@@ -176,34 +190,7 @@ function navbar() {
               >
                 Virtual Museum
               </a>
-              <a
-                href="/Verify"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Verify' ? 'underline font-semibold' : ''}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Verify
-              </a>
-              <a
-                href="/Learn"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Learn' ? 'underline font-semibold' : ''}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Learn
-              </a>
-              <a
-                href="/Festivals"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Festivals' ? 'underline font-semibold' : ''}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Festivals
-              </a>
-              <a
-                href="/Help"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Help' ? 'underline font-semibold' : ''}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Help
-              </a>
+             
             </div>
           )}
         </div>
