@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavbarWrapper from "@/components/Navbar/NavbarWrapper";
+import Web3ProviderWrapper from "@/components/providers/Web3ProviderWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,8 +30,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <NavbarWrapper />
-        {children}
+        <Web3ProviderWrapper>
+          <NavbarWrapper />
+          {children}
+        </Web3ProviderWrapper>
       </body>
     </html>
   );

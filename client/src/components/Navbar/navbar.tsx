@@ -127,6 +127,11 @@ function navbar() {
               />
             </div>
 
+
+
+
+            
+
             {/* Mobile - Connect Wallet Button */}
             <div className='lg:hidden'>
               <button className='bg-[#693422] text-xs text-white px-3 py-1 hover:bg-[#693422]/90 transition-colors cursor-pointer'>Connect</button>

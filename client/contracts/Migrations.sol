@@ -24,6 +24,3 @@ contract Migrations {
 
 
 
-// Keeps track of smart contract deployments
-// Prevents duplicate migrations
-// Used internally by Truffle framework

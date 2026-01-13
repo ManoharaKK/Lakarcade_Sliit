@@ -3,8 +3,7 @@ import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Button from '@/components/Home/Button'
 import Description from '@/components/Home/Description'
-import { useWeb3 } from '@/providers/web3'
-import { Web3Provider } from '@/providers'
+import { useWeb3 } from '@/components/providers/web3'
 import Section2 from '@/components/Home/Section2'
 import Section4 from '@/components/Home/Section4'
 import Section5 from '@/components/Home/Section5'
@@ -14,6 +13,7 @@ import Section8 from '@/components/Home/Section8'
 import Section9 from '@/components/Home/Section9'
 import Footer from '@/components/Footer/Footer'
 import Section3 from '@/components/Home/Section3'
+
 function PageContent() {
   const { contract, provider } = useWeb3();
 
@@ -185,12 +185,6 @@ function PageContent() {
   )
 }
 
-function page() {
-  return (
-    <Web3Provider>
-      <PageContent />
-    </Web3Provider>
-  )
+export default function page() {
+  return <PageContent />
 }
-
-export default page

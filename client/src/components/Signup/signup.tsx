@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import Navbar from '../../components/Navbar/navbar'
+import Navbar from '../Navbar/navbar'
 import Image from 'next/image'
 import axios from 'axios'
 
