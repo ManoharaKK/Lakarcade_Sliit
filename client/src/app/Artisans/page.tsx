@@ -4,13 +4,26 @@ import Navbar from '@/components/Navbar/navbar'
 import NFTForm from '@/components/NFT/NFTForm'
 import SimpleNFTForm from '@/components/NFT/SimpleNFTForm'
 import QRcode from '@/components/QR/QRcode'
+import { NftMeta } from '../../../types/nft'
 function page() {
   const [formType, setFormType] = useState('full')
-
   const handleFullFormSubmit = (data: any) => {
     console.log('Full Form Data:', data)
     alert('Form submitted successfully!')
   }
+
+  const [nftURI, setNftURI] = useState('')
+  const [hasUsedURI, setHasUsedURI] = useState(false);
+  const [nftMetadata, setNftMetadata] = useState<NftMeta>({
+    name: '',
+    description: '',
+    image: '',
+    attributes: [
+      { trait_type: "attack", value: "0" },
+      { trait_type: "health", value: "0" },
+      { trait_type: "speed", value: "0" },
+    ],
+  });
 
   const handleSimpleFormSubmit = (data: any) => {
     console.log('Simple Form Data:', data)

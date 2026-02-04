@@ -3,7 +3,26 @@
 import { createContext, FunctionComponent, ReactNode, useContext, useState, useEffect, useRef } from "react";
 import { ethers, BrowserProvider } from "ethers";
 import { createDefaultState, Web3State, loadContract, createWeb3State } from "./utils";
+import { MetaMaskInpageProvider } from "@metamask/providers";
+import { NftMarketContract } from "@_types/nftMarketContract";
 
+const pageReload = () => { window.location.reload(); }
+
+const handleAccount = (ethereum: MetaMaskInpageProvider) =>  async () => {
+  const isLocked = !(await ethereum._metamask.isUnlocked());
+  if (isLocked) { pageReload(); }
+
+}
+
+const setGlobalListener = (ethereum: MetaMaskInpageProvider) => {
+  ethereum.on("chainChanged",pageReload );
+  ethereum.on("accountsChanged",handleAccount(ethereum) );
+}
+
+const removeGlobalListener = (ethereum: MetaMaskInpageProvider) => {
+  ethereum?.removeListener("chainChanged",pageReload );
+  ethereum?.removeListener("accountsChanged",handleAccount );
+}
 
 const Web3Context = createContext<Web3State>(createDefaultState());
 
@@ -33,10 +52,26 @@ const Web3Provider: FunctionComponent<{ children: ReactNode }> = ({ children }) 
 
         const contract = await loadContract("NftMarket", provider);
         
+        // Get signer and create signed contract for write operations
+        // Only if accounts are available (user has connected wallet)
+        let signedContract = contract as unknown as NftMarketContract;
+        try {
+          const accounts = await provider.listAccounts();
+          if (accounts.length > 0) {
+            const signer = await provider.getSigner();
+            signedContract = contract.connect(signer) as unknown as NftMarketContract;
+          }
+        } catch (signerError) {
+          // No accounts connected yet, use read-only contract
+          console.log("No signer available, using read-only contract");
+        }
+        
+        setTimeout(() => { setGlobalListener(window.ethereum); }, 500);
+
         setWeb3Api(createWeb3State({ 
           ethereum: window.ethereum, 
           provider, 
-          contract, 
+          contract: signedContract,
           isLoading: false 
         }));
       } catch (error: any) {
@@ -53,7 +88,9 @@ const Web3Provider: FunctionComponent<{ children: ReactNode }> = ({ children }) 
     }
 
     initWeb3();
+    return () => removeGlobalListener(window.ethereum);
   }, []);
+
 
   return (
     <Web3Context.Provider value={web3Api}>

@@ -3,46 +3,19 @@
 import React from 'react'
 import Navbar from '@/components/Navbar/navbar'
 import Cards from '@/components/NFT/cards'
-import metaData from '@/content/meta.json'
-import { useWeb3 } from '@/components/providers/web3';
+import { useListedNfts } from '@/components/hooks/web3'
+import { Nft } from '@_types/nft'
+
 
 function PageContent() {
-  const { provider, contract } = useWeb3();
-
   
-  const getNftInfo = async () => {
-    try {
-      const name = await contract!.name();
-      const symbol = await contract!.symbol();
-      console.log("NFT Name:", name);
-      console.log("NFT Symbol:", symbol);
-    } catch (error: any) {
-      if (error?.code === 'BAD_DATA' || error?.message?.includes('could not decode')) {
-        console.warn("Contract not deployed or invalid address");
-      } else {
-        console.error("Error fetching NFT info:", error);
-      }
-    }
-  }
-
-  if (contract) {
-    getNftInfo().catch(() => {}); // Prevent unhandled rejection
-  }
-
-  const getAccounts = async () => {
-    try {
-      const accounts = await provider!.listAccounts();
-      if (accounts.length > 0) {
-        console.log("Connected account:", accounts[0].address);
-      }
-    } catch (error) {
-      console.error("Error fetching accounts:", error);
-    }
-  }
-
-  if (provider) {
-    getAccounts().catch(() => {}); // Prevent unhandled rejection
-  }
+  const { nfts } = useListedNfts();
+  const buyNft = nfts.buyNft;
+  
+  // Debug: Log the data structure
+  console.log("NFTs data:", nfts.data);
+  console.log("NFTs isLoading:", nfts.isLoading);
+  console.log("NFTs error:", nfts.error);
 
   return (
     <div>
@@ -59,20 +32,38 @@ function PageContent() {
             </p>
           </div>
 
-             <div className="mt-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-               {metaData.map((item, index) => (
-                 <div key={index}>
-                   <Cards 
-                     name={item.name}
-                     description={item.description}
-                     image={item.image}
-                     attributes={item.attributes}
-                   />
-                 </div>
-               ))}
-             </div>
-
-          
+          {nfts.isLoading ? (
+            <div className="mt-12 text-center">
+              <p className="text-white text-lg">Loading NFTs...</p>
+            </div>
+          ) : nfts.data && nfts.data.length > 0 ? (
+            <div className="mt-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {nfts.data.map((item: Nft, index: number) => {
+                // Debug each item
+                console.log("NFT item:", item);
+                
+                return (
+                  <div key={item.tokenId || index}>
+                    <Cards 
+                      name={item.meta?.name || `NFT #${item.tokenId}`}
+                      description={item.meta?.description || `A unique creature NFT`}
+                      image={item.meta?.image || '/images/placeholder.png'}
+                      attributes={item.meta?.attributes || []}
+                      price={item.price?.toFixed(4)}
+                      tokenId={item.tokenId}
+                      priceNum={item.price}
+                      buyNft={buyNft}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mt-12 text-center">
+              <p className="text-white text-lg">No NFTs listed for sale</p>
+              <p className="text-gray-400 text-sm mt-2">Check back later for new listings.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { IoCartOutline } from "react-icons/io5"
@@ -12,15 +12,15 @@ import Walletbar from './Walletbar'
 function navbar() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const { account } = useAccount();
-
-  console.log("Is Loading:", account.isLoading);
-  console.log("Is Installed:", account.isInstalled);
-
   const { network } = useNetwork();
 
-  console.log(network.data)
+  // Prevent hydration mismatch by only showing dynamic content after mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
 
   return (
@@ -110,13 +110,23 @@ function navbar() {
             </div>
             <div className='hidden lg:flex items-center gap-2'>
             <div className="text-gray-300">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800" suppressHydrationWarning>
                     <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
                       <circle cx={4} cy={4} r={3} />
                     </svg>
-                    {network.data} ---
-                    {`Is supported: ${network.isSupported}`} ---
-                    Target: {network.targetNetwork}
+                    
+
+                    { !mounted ?
+                    "Loading..." :
+                    !account.isInstalled ?
+                    "Install MetaMask" :
+                    network.isLoading ?
+                    "Loading..." :
+                    network.data || "Unknown Network"
+                    }
+
+                   
+                   
                   </span>
                 </div>
               <Walletbar 
@@ -128,9 +138,6 @@ function navbar() {
             </div>
 
 
-
-
-            
 
             {/* Mobile - Connect Wallet Button */}
             <div className='lg:hidden'>
