@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '@/components/Navbar/navbar'
 import { useWeb3 } from '@/components/providers/web3'
+import { useListedNfts } from '@/components/hooks/web3'
 
 function MarketplaceContent() {
   const { provider, ethereum } = useWeb3();
@@ -87,6 +88,9 @@ function MarketplaceContent() {
     };
   }, [provider, ethereum]);
 
+  const { nfts } = useListedNfts();
+  console.log(nfts.data);
+
   return (
     <div className='min-h-screen bg-darkbrown pt-[180px]'>
       <Navbar />
@@ -135,7 +139,6 @@ function MarketplaceContent() {
     </div>
   )
 }
-
 export default function page() {
   return <MarketplaceContent />
 }
