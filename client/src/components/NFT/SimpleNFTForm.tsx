@@ -1,15 +1,26 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 interface SimpleNFTFormProps {
   onSubmit: (data: any) => void
+  initialUrl?: string
 }
 
-function SimpleNFTForm({ onSubmit }: SimpleNFTFormProps) {
+function SimpleNFTForm({ onSubmit, initialUrl }: SimpleNFTFormProps) {
   const [formData, setFormData] = useState({
     url: '',
     price: ''
   })
+  
+  // Auto-fill URL when initialUrl prop changes (e.g., from main form submission)
+  useEffect(() => {
+    if (initialUrl) {
+      setFormData(prev => ({
+        ...prev,
+        url: initialUrl
+      }))
+    }
+  }, [initialUrl])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -21,7 +32,12 @@ function SimpleNFTForm({ onSubmit }: SimpleNFTFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
+    onSubmit({
+      url: formData.url,
+      price: formData.price,
+      imageUrl: formData.url,
+      ipfsLink: formData.url.startsWith('ipfs://') ? formData.url : null,
+    })
     // Reset form
     setFormData({
       url: '',
@@ -30,14 +46,14 @@ function SimpleNFTForm({ onSubmit }: SimpleNFTFormProps) {
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-[200px]">
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Simple NFT Form</h2>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* URL Link */}
         <div>
           <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
-            URL Link
+            URL metadata
           </label>
           <input
             type="url"
@@ -47,7 +63,7 @@ function SimpleNFTForm({ onSubmit }: SimpleNFTFormProps) {
             onChange={handleInputChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="https://example.com"
+            placeholder="https://gateway.pinata.cloud/ipfs/Qm..."
           />
         </div>
 

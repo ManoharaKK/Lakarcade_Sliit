@@ -2,19 +2,26 @@
 import React, { useState } from 'react'
 import Navbar from '@/components/Navbar/navbar'
 import NFTForm from '@/components/NFT/NFTForm'
-import SimpleNFTForm from '@/components/NFT/SimpleNFTForm'
+import SimpleNFTForm from '@/components/NFT/NFTForm'
 import QRcode from '@/components/QR/QRcode'
 import { NftMeta } from '../../../types/nft'
+import { useWeb3 } from '@/components/providers/web3'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 function page() {
   const [formType, setFormType] = useState('full')
   const handleFullFormSubmit = (data: any) => {
-    console.log('Full Form Data:', data)
-    alert('Form submitted successfully!')
+    const { contractAddress, id, ...nftMeta } = data
+    console.log('Full Form Data (meta):', nftMeta)
+    console.log('contractAddress:', contractAddress)
+    console.log('id:', id)
+    alert(`Form submitted. contractAddress: ${contractAddress ?? '—'}, id: ${id ?? '—'}`)
+    toast.success('Form submitted successfully!')
   }
-
+  const { ethereum } = useWeb3()
   const [nftURI, setNftURI] = useState('')
   const [hasUsedURI, setHasUsedURI] = useState(false);
-  const [nftMetadata, setNftMetadata] = useState<NftMeta>({
+  const [nftMeta, setNftMeta] = useState<NftMeta>({
     name: '',
     description: '',
     image: '',
@@ -27,9 +34,33 @@ function page() {
 
   const handleSimpleFormSubmit = (data: any) => {
     console.log('Simple Form Data:', data)
-    alert('Form submitted successfully!')
+    toast.success('Form submitted successfully!')
   }
 
+  const createNft = async () => {
+    try {
+      const messageToSign = await axios.get("/api/verify");
+      const accounts = await ethereum?.request({ method: 'eth_requestAccounts' }) as string[];
+      const account = accounts[0];
+
+      const signedData = await ethereum?.request({ 
+        method: 'personal_sign', 
+        params: [JSON.stringify(messageToSign.data), account, messageToSign.data.id] 
+      })
+
+      await axios.post("/api/verify", {
+        address: account,
+        signature: signedData,
+        nft: nftMeta,
+      })
+      console.log(signedData)
+      toast.success('NFT created successfully!')
+    }
+    catch (error) {
+      console.error('Error creating NFT:', error);
+      toast.error('Error creating NFT!')
+      }
+  }
   return (
     <div className="bg-blackbrown min-h-screen">
       <Navbar />
