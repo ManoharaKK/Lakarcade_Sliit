@@ -7,6 +7,7 @@ import QRcode from '@/components/QR/QRcode'
 import { NftMeta } from '../../../types/nft'
 import { useWeb3 } from '@/components/providers/web3'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 function page() {
   const [formType, setFormType] = useState('full')
   const handleFullFormSubmit = (data: any) => {
@@ -15,6 +16,7 @@ function page() {
     console.log('contractAddress:', contractAddress)
     console.log('id:', id)
     alert(`Form submitted. contractAddress: ${contractAddress ?? '—'}, id: ${id ?? '—'}`)
+    toast.success('Form submitted successfully!')
   }
   const { ethereum } = useWeb3()
   const [nftURI, setNftURI] = useState('')
@@ -32,7 +34,7 @@ function page() {
 
   const handleSimpleFormSubmit = (data: any) => {
     console.log('Simple Form Data:', data)
-    alert('Form submitted successfully!')
+    toast.success('Form submitted successfully!')
   }
 
   const createNft = async () => {
@@ -46,18 +48,18 @@ function page() {
         params: [JSON.stringify(messageToSign.data), account, messageToSign.data.id] 
       })
 
-      debugger;
-
       await axios.post("/api/verify", {
         address: account,
         signature: signedData,
         nft: nftMeta,
       })
       console.log(signedData)
+      toast.success('NFT created successfully!')
     }
     catch (error) {
       console.error('Error creating NFT:', error);
-    }
+      toast.error('Error creating NFT!')
+      }
   }
   return (
     <div className="bg-blackbrown min-h-screen">

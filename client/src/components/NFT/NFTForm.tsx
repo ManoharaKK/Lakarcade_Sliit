@@ -1,10 +1,12 @@
 'use client'
+import { formatEther } from 'ethers';
 import React, { useState } from 'react'
 import { NftMeta } from '../../../types/nft'
 import axios from 'axios'
 import { useWeb3 } from '@/components/providers/web3'
-
-
+const ALLOWED_FIELDS = ["name", "description", "image", "attributes"];
+import { ethers } from 'ethers';
+import { toast } from 'react-toastify';
 
 /** Form state: image can be a File during input, or string (URL) */
 type FormNftMeta = Omit<NftMeta, 'image'> & { image: string | File | null }
@@ -43,7 +45,8 @@ function NFTForm({ onSubmit }: NFTFormProps) {
   const [nftMeta, setNftMeta] = useState<FormNftMeta>(initialMeta)
   const [submitting, setSubmitting] = useState(false)
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null)
-  const { ethereum } = useWeb3()
+  const [price, setPrice] = useState<string>('')
+  const { ethereum, contract } = useWeb3()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -72,7 +75,10 @@ function NFTForm({ onSubmit }: NFTFormProps) {
       return;
     }
     const file = e.target.files[0];
-    if (!file.type.startsWith("image/")) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select a valid image file");
+      return;
+    }
 
     if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
     const previewUrl = URL.createObjectURL(file);
@@ -81,6 +87,7 @@ function NFTForm({ onSubmit }: NFTFormProps) {
 
     const buffer = await file.arrayBuffer();
     const bytes = Array.from(new Uint8Array(buffer));
+    const toastId = toast.loading("Uploading image to Pinata...");
     try {
       const { signedData, account } = await getSignedData(ethereum);
       const res = await axios.post("/api/verify-image", {
@@ -91,8 +98,22 @@ function NFTForm({ onSubmit }: NFTFormProps) {
         filename: file.name.replace(/\.[^/.]+$/, "") || "image",
       }, { withCredentials: true });
       console.log(res.data);
-    } catch (error) {
-      console.error("Failed to get signed data:", error)
+      toast.update(toastId, {
+        render: "Image uploaded successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      const msg = err.response?.data?.message || err.message || "Failed to upload image";
+      console.error("Failed to get signed data:", error);
+      toast.update(toastId, {
+        render: `Image upload failed: ${msg}`,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   }
 
@@ -117,10 +138,16 @@ function NFTForm({ onSubmit }: NFTFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
+    const toastId = toast.loading("Submitting form...");
     let contractAddress: string | undefined
     let id: string | undefined
     try {
       // 1) GET message first so we always have contractAddress + id to show
+      toast.update(toastId, {
+        render: "Fetching contract information...",
+        type: "info",
+        isLoading: true,
+      });
       const { data: messageData } = await axios.get("/api/verify", { withCredentials: true })
       contractAddress = messageData?.contractAddress
       id = messageData?.id
@@ -131,6 +158,11 @@ function NFTForm({ onSubmit }: NFTFormProps) {
       if (!ethereum) {
         throw new Error('Wallet not available')
       }
+      toast.update(toastId, {
+        render: "Requesting wallet signature...",
+        type: "info",
+        isLoading: true,
+      });
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' }) as string[]
       const address = accounts[0]
       if (!address) throw new Error('No wallet address')
@@ -143,6 +175,11 @@ function NFTForm({ onSubmit }: NFTFormProps) {
       }) as string
 
       // 3) Build nft payload: name, description, image (URL string), attributes
+      toast.update(toastId, {
+        render: "Preparing NFT metadata...",
+        type: "info",
+        isLoading: true,
+      });
       const imageUrl = await imageToUrl(nftMeta.image)
       const nft = {
         name: nftMeta.name,
@@ -152,6 +189,11 @@ function NFTForm({ onSubmit }: NFTFormProps) {
       }
 
       // 4) POST so server can verify signature and pin to Pinata
+      toast.update(toastId, {
+        render: "Uploading to Pinata...",
+        type: "info",
+        isLoading: true,
+      });
       const { data: postData } = await axios.post(
         "/api/verify",
         { address, signature, nft },
@@ -162,30 +204,136 @@ function NFTForm({ onSubmit }: NFTFormProps) {
       if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl)
       setImagePreviewUrl(null)
       setNftMeta(initialMeta)
-    } catch (error) {
+      toast.update(toastId, {
+        render: "Form submitted successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      const msg = err.response?.data?.message || err.message || "Failed to submit form";
       console.error("Failed to verify / pin NFT:", error)
       onSubmit({ ...nftMeta, contractAddress, id })
+      toast.update(toastId, {
+        render: `Form submission failed: ${msg}`,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     } finally {
       setSubmitting(false)
     }
   }
 
   const uploadMetadata = async () => {
+    const toastId = toast.loading("Uploading metadata to Pinata...");
     try {
+      // Build nft payload with proper image URL
+      let imageUrl: string;
+      if (typeof nftMeta.image === "string") {
+        imageUrl = nftMeta.image;
+      } else if (nftMeta.image instanceof File) {
+        imageUrl = await imageToUrl(nftMeta.image);
+      } else {
+        imageUrl = "";
+      }
+
+      const nft = {
+        name: nftMeta.name,
+        description: nftMeta.description,
+        image: imageUrl,
+        attributes: nftMeta.attributes,
+      }
+
       const { signedData, account } = await getSignedData(ethereum);
 
-     const res =  await axios.post("/api/verify", {
+      const res = await axios.post("/api/verify", {
         address: account,
         signature: signedData,
-        nft: nftMeta
+        nft: nft
       }, { withCredentials: true })
 
-      const data = res.data as { IpfsHash?: string; [k: string]: unknown };
+      const data = res.data as { IpfsHash?: string;[k: string]: unknown };
       if (data.IpfsHash) {
-        setNftURI(`${process.env.NEXT_PUBLIC_PINATA_DOMAIN}/ipfs/${data.IpfsHash}`);
+        const metadataURI = `${process.env.NEXT_PUBLIC_PINATA_DOMAIN || 'https://gateway.pinata.cloud'}/ipfs/${data.IpfsHash}`;
+        setNftURI(metadataURI);
+        toast.update(toastId, {
+          render: "Metadata uploaded successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      } else {
+        throw new Error("No IPFS hash returned from server");
       }
-    } catch (error) {
-      console.error("Failed to create NFT:", error)
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      const msg = err.response?.data?.message || err.message || "Failed to upload metadata";
+      console.error("Failed to upload metadata:", msg);
+      toast.update(toastId, {
+        render: `Metadata upload failed: ${msg}`,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+    }
+  }
+
+
+  const createNft = async () => {
+    const toastId = toast.loading("Creating NFT on blockchain...");
+    try {
+      const nftRes = await axios.get(nftURI);
+      const content = nftRes.data;
+
+      Object.keys(content).forEach(key => {
+        if (!ALLOWED_FIELDS.includes(key)) {
+          throw new Error("Invalid Json structure");
+        }
+      })
+
+      if (!contract) {
+        throw new Error("Contract not available");
+      }
+
+      const priceInWei = ethers.parseEther(price);
+      const listingPriceWei = "25000000000000000"; // 0.025 ETH in wei
+
+      toast.update(toastId, {
+        render: "Waiting for transaction confirmation...",
+        type: "info",
+        isLoading: true,
+      });
+
+      const tx = await contract.mintToken(
+        nftURI,
+        priceInWei.toString(),
+        { value: listingPriceWei }
+      );
+
+      if (!tx) {
+        throw new Error("Transaction failed");
+      }
+
+      await tx.wait();
+      toast.update(toastId, {
+        render: "NFT created successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
+
+
+    } catch (e: any) {
+      const errorMsg = e.message || e.reason || "Failed to create NFT";
+      console.error("Failed to create NFT:", errorMsg);
+      toast.update(toastId, {
+        render: `NFT creation failed: ${errorMsg}`,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   }
 
@@ -316,14 +464,59 @@ function NFTForm({ onSubmit }: NFTFormProps) {
 
         {/* Save Button */}
         <button
-          type="submit"
+          type="button"
           onClick={uploadMetadata}
           disabled={submitting}
           className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors"
         >
-          {submitting ? "Getting message…" : "Upload Metadata"}
+          {submitting ? "Uploading…" : "Upload Metadata"}
         </button>
       </form>
+
+      {/* Create NFT Section - shows after metadata is uploaded */}
+      {nftURI && (
+        <div className="mt-6 pt-6 border-t border-gray-200">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Create NFT</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Metadata URI
+              </label>
+              <input
+                type="text"
+                value={nftURI}
+                readOnly
+                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                Price (ETH)
+              </label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                min="0"
+                step="0.01"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="0.1"
+              />
+            </div>
+            <button
+              onClick={createNft}
+              type="button"
+              disabled={!price || parseFloat(price) <= 0}
+              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              List
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
