@@ -44,13 +44,13 @@ export const hookFactory: ListedNftsHookFactory = ({contract}) => () => {
             console.error(`Error fetching metadata for token ${tokenIdValue}:`, metaError);
           }
 
-          // Convert ethers v5 BigNumber to string for ethers v6 formatEther
-          // Type assertion needed because contract types use ethers v5 BigNumber
+          // Keep exact wei (string) for buyNft so msg.value matches contract price
           const priceValue = (item.price as any)?.toString?.() ?? String(item.price);
           const priceInEth = parseFloat(formatEther(priceValue));
           
           const nftData = {
             price: priceInEth,
+            priceWei: priceValue,
             tokenId: tokenIdValue,
             creator: item.creator,
             isListed: item.isListed,
