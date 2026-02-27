@@ -149,6 +149,13 @@ function placeNftOnSale(uint tokenId, uint newPrice) public payable {
     _listedItems.increment();
 }
 
+function updateNftPrice(uint tokenId, uint newPrice) public {
+    require(ERC721.ownerOf(tokenId) == msg.sender, "You are not the owner of the NFT");
+    require(_idToNftItem[tokenId].isListed == true, "NFT is not listed");
+    require(newPrice > 0, "Price must be greater than 0");
+    _idToNftItem[tokenId].price = newPrice;
+}
+
 function _createNftItem(
     uint tokenId,
     uint price
