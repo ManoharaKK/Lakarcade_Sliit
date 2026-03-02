@@ -71,23 +71,24 @@ function navbar() {
                 Market
               </a>
               <a
-                href="/Marketplace"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Marketplace' ? 'underline font-semibold' : ''}`}
-              >
-                Marketplace
-              </a>
-              <a
-                href="/NftHandycraft"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/NftHandycraft' ? 'underline font-semibold' : ''}`}
-              >
-                NFT Handycraft
-              </a>
-              <a
                 href="/NFTMarket"
                 className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/NFTMarket' ? 'underline font-semibold' : ''}`}
               >
                 NFT Market
               </a>
+              <a
+                href="/NftHandycraft"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/NftHandycraft' ? 'underline font-semibold' : ''}`}
+              >
+                Legacy NFTs
+              </a>
+              <a
+                href="/ProductNfts"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/ProductNfts' ? 'underline font-semibold' : ''}`}
+              >
+                Product NFTs
+              </a>
+              
               <a
                 href="/Artisans"
                 className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Artisans' ? 'underline font-semibold' : ''}`}
@@ -163,18 +164,18 @@ function navbar() {
                 Market
               </a>
               <a
-                href="/Marketplace"
-                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/Marketplace' ? 'underline font-semibold' : ''}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Marketplace
-              </a>
-              <a
                 href="/NftHandycraft"
                 className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/NftHandycraft' ? 'underline font-semibold' : ''}`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 NFT Handycraft
+              </a>
+              <a
+                href="/ProductNfts"
+                className={`transition-all duration-200 hover:underline underline-offset-4 cursor-pointer ${pathname === '/ProductNfts' ? 'underline font-semibold' : ''}`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Product NFTs
               </a>
               <a
                 href="/NFTMarket"

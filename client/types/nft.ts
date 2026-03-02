@@ -19,7 +19,7 @@ export const RESOURCE_UNLOCK_SCORE_OPTIONS = [
 
 export const ARTIFACT_TYPE_OPTIONS = [
   "Sculpture", "Painting", "Textile", "Pottery", "Metalwork",
-  "Manuscript", "Jewelry", "Woodwork", "Other",
+  "Manuscript", "Ancient Fresco Mural", "Jewelry", "Woodwork", "Other",
 ] as const;
 
 export const COMMUNITY_PERKS_OPTIONS = [
@@ -30,6 +30,20 @@ export const COMMUNITY_PERKS_OPTIONS = [
   "Heritage site visits",
   "Exclusive content",
   "Member discount",
+] as const;
+
+/** Product NFT only – branch/category dropdown */
+export const BRANCHES_OPTIONS = [
+  "Woodwork",
+  "Textile",
+  "Pottery",
+  "Metalwork",
+  "Jewelry",
+  "Sculpture",
+  "Painting",
+  "Leather",
+  "Basketry",
+  "Other",
 ] as const;
 
 export type NftMeta = {
@@ -44,11 +58,22 @@ export type NftMeta = {
   originLocation?: string;
   historicalPeriod?: string;
   artifactType?: string;
+  /** 'heritage' | 'product' - heritage shows on main gallery, product on Product NFTs page */
+  nftType?: 'heritage' | 'product';
   mintPriceEth?: string;
   usdEquivalent?: string;
   communityPerks?: string[];
   sourceReference?: string;
   disclaimer?: string;
+  /** Product NFT only */
+  branches?: string;
+  material?: string;
+  color?: string;
+  craftTechnique?: string;
+  careInstructions?: string;
+  shippingInformation?: string;
+  returnsDescription?: string;
+  artisanStory?: string;
 };
 
 export type NftCore = {

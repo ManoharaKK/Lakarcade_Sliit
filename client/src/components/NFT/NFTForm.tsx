@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import {
   NftMeta,
   ARTIFACT_TYPE_OPTIONS,
+  BRANCHES_OPTIONS,
   COMMUNITY_PERKS_OPTIONS,
   MEMBERSHIP_LEVEL_OPTIONS,
   ACCESS_LEVEL_OPTIONS,
@@ -26,6 +27,7 @@ import {
   FiChevronDown,
   FiUpload,
   FiX,
+  FiPackage,
 } from 'react-icons/fi'
 
 function SectionCard({
@@ -62,7 +64,8 @@ const ALLOWED_FIELDS = [
   "name", "description", "image", "attributes",
   "collectionName", "collectionYear", "pieceNumber", "totalPiecesInCollection",
   "originLocation", "historicalPeriod", "artifactType",
-  "mintPriceEth", "usdEquivalent", "communityPerks", "sourceReference", "disclaimer",
+  "nftType", "mintPriceEth", "usdEquivalent", "communityPerks", "sourceReference", "disclaimer",
+  "branches", "material", "color", "craftTechnique", "careInstructions", "shippingInformation", "returnsDescription", "artisanStory",
 ];
 
 const HERITAGE_DISCLAIMER =
@@ -78,10 +81,19 @@ type FormNftMeta = Omit<NftMeta, 'image'> & {
   originLocation: string;
   historicalPeriod: string;
   artifactType: string;
+  nftType: 'heritage' | 'product';
   mintPriceEth: string;
   usdEquivalent: string;
   communityPerks: string[];
   sourceReference: string;
+  branches: string;
+  material: string;
+  color: string;
+  craftTechnique: string;
+  careInstructions: string;
+  shippingInformation: string;
+  returnsDescription: string;
+  artisanStory: string;
 };
 
 interface NFTFormProps {
@@ -104,10 +116,19 @@ const initialMeta: FormNftMeta = {
   originLocation: '',
   historicalPeriod: '',
   artifactType: '',
+  nftType: 'heritage',
   mintPriceEth: '',
   usdEquivalent: '',
   communityPerks: [],
   sourceReference: '',
+  branches: '',
+  material: '',
+  color: '',
+  craftTechnique: '',
+  careInstructions: '',
+  shippingInformation: '',
+  returnsDescription: '',
+  artisanStory: '',
 }
 
 const getSignedData = async (ethereum: unknown) => {
@@ -162,7 +183,7 @@ function NFTForm({ onSubmit }: NFTFormProps) {
     return () => { cancelled = true }
   }, [contract, nftMeta.pieceNumber])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setNftMeta(prev => {
       const next = { ...prev, [name]: value }
@@ -284,11 +305,23 @@ function NFTForm({ onSubmit }: NFTFormProps) {
     if (meta.originLocation) payload.originLocation = meta.originLocation;
     if (meta.historicalPeriod) payload.historicalPeriod = meta.historicalPeriod;
     if (meta.artifactType) payload.artifactType = meta.artifactType;
+    payload.nftType = meta.nftType || 'heritage';
     if (meta.mintPriceEth) payload.mintPriceEth = meta.mintPriceEth;
     if (meta.usdEquivalent) payload.usdEquivalent = meta.usdEquivalent;
-    if (meta.communityPerks?.length) payload.communityPerks = meta.communityPerks;
-    if (meta.sourceReference) payload.sourceReference = meta.sourceReference;
-    payload.disclaimer = HERITAGE_DISCLAIMER;
+    if (meta.nftType !== 'product') {
+      if (meta.communityPerks?.length) payload.communityPerks = meta.communityPerks;
+      if (meta.sourceReference) payload.sourceReference = meta.sourceReference;
+      payload.disclaimer = HERITAGE_DISCLAIMER;
+    } else {
+      if (meta.branches) payload.branches = meta.branches;
+      if (meta.material) payload.material = meta.material;
+      if (meta.color) payload.color = meta.color;
+      if (meta.craftTechnique) payload.craftTechnique = meta.craftTechnique;
+      if (meta.careInstructions) payload.careInstructions = meta.careInstructions;
+      if (meta.shippingInformation) payload.shippingInformation = meta.shippingInformation;
+      if (meta.returnsDescription) payload.returnsDescription = meta.returnsDescription;
+      if (meta.artisanStory) payload.artisanStory = meta.artisanStory;
+    }
     return payload;
   };
 
@@ -476,13 +509,17 @@ function NFTForm({ onSubmit }: NFTFormProps) {
 
 
     } catch (e: any) {
-      const errorMsg = e.message || e.reason || "Failed to create NFT";
-      console.error("Failed to create NFT:", errorMsg);
+      const rawMsg = e.message || e.reason || "Failed to create NFT";
+      const isRpcError = /RPC endpoint|retrying|different RPC|rate limit|too many errors/i.test(rawMsg);
+      const errorMsg = isRpcError
+        ? "Network/RPC is busy or rate-limited. Please try again in a few minutes, or switch to a different RPC in your wallet (e.g. another network)."
+        : rawMsg;
+      console.error("Failed to create NFT:", rawMsg);
       toast.update(toastId, {
         render: `NFT creation failed: ${errorMsg}`,
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose: 8000,
       });
     }
   }
@@ -491,6 +528,7 @@ function NFTForm({ onSubmit }: NFTFormProps) {
     'w-full px-4 py-3 border border-secondarybrown/30 bg-primary focus:outline-none focus:ring-2 focus:ring-secondarybrown/40 focus:border-secondarybrown placeholder:text-lightbrown/70 text-blackbrown transition-all duration-200'
   const selectClass = inputClass + ' pr-10 appearance-none cursor-pointer'
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const isProductNft = nftMeta.nftType === 'product'
 
   return (
     <div className="w-full max-w-full min-h-0">
@@ -568,6 +606,66 @@ function NFTForm({ onSubmit }: NFTFormProps) {
           </div>
         </SectionCard>
 
+        <SectionCard title="NFT type" icon={FiLayers}>
+          <p className="text-sm text-lightbrown mb-4">Choose whether this is a Cultural Heritage NFT or a Product NFT. Heritage NFTs appear on the main gallery; Product NFTs have their own page.</p>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-3 cursor-pointer p-3 border border-secondarybrown/20 bg-primary hover:border-secondarybrown/40 transition-all duration-200 has-[:checked]:border-secondarybrown/50 has-[:checked]:bg-secondarybrown/10 flex-1">
+              <input type="radio" name="nftType" value="heritage" checked={nftMeta.nftType === 'heritage'} onChange={(e) => setNftMeta(prev => ({ ...prev, nftType: 'heritage' }))} className="h-4 w-4 border-secondarybrown/40 accent-secondarybrown text-secondarybrown focus:ring-2 focus:ring-secondarybrown/40" />
+              <span className="text-sm font-medium text-blackbrown">Cultural Heritage</span>
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer p-3 border border-secondarybrown/20 bg-primary hover:border-secondarybrown/40 transition-all duration-200 has-[:checked]:border-secondarybrown/50 has-[:checked]:bg-secondarybrown/10 flex-1">
+              <input type="radio" name="nftType" value="product" checked={nftMeta.nftType === 'product'} onChange={(e) => setNftMeta(prev => ({ ...prev, nftType: 'product' }))} className="h-4 w-4 border-secondarybrown/40 accent-secondarybrown text-secondarybrown focus:ring-2 focus:ring-secondarybrown/40" />
+              <span className="text-sm font-medium text-blackbrown">Product NFT</span>
+            </label>
+          </div>
+        </SectionCard>
+
+        {nftMeta.nftType === 'product' && (
+          <SectionCard title="Product details" icon={FiPackage} fullWidth>
+            <p className="text-sm text-lightbrown mb-4">Additional information for Product NFTs. Fill in as needed.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <label htmlFor="branches" className="block text-sm font-medium text-blackbrown mb-1.5">Branches</label>
+                <div className="relative">
+                  <select id="branches" name="branches" value={nftMeta.branches} onChange={handleInputChange} className={selectClass}>
+                    <option value="">Select branch</option>
+                    {BRANCHES_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="material" className="block text-sm font-medium text-blackbrown mb-1.5">Material</label>
+                <input id="material" name="material" value={nftMeta.material} onChange={handleInputChange} className={inputClass} placeholder="e.g. Wood, Clay" />
+              </div>
+              <div>
+                <label htmlFor="color" className="block text-sm font-medium text-blackbrown mb-1.5">Color</label>
+                <input id="color" name="color" value={nftMeta.color} onChange={handleInputChange} className={inputClass} placeholder="e.g. Natural, Brown" />
+              </div>
+            </div>
+            <div className="mt-4">
+              <label htmlFor="craftTechnique" className="block text-sm font-medium text-blackbrown mb-1.5">Craft Technique</label>
+              <input id="craftTechnique" name="craftTechnique" value={nftMeta.craftTechnique} onChange={handleInputChange} className={inputClass} placeholder="e.g. Hand-carved, Hand-woven" />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="careInstructions" className="block text-sm font-medium text-blackbrown mb-1.5">Care Instructions (one per line)</label>
+              <textarea id="careInstructions" name="careInstructions" value={nftMeta.careInstructions} onChange={handleInputChange} rows={3} className={inputClass} placeholder="One instruction per line&#10;e.g. Keep dry&#10;Store in cool place" />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="shippingInformation" className="block text-sm font-medium text-blackbrown mb-1.5">Shipping Information</label>
+              <textarea id="shippingInformation" name="shippingInformation" value={nftMeta.shippingInformation} onChange={handleInputChange} rows={2} className={inputClass} placeholder="Delivery times, packaging, etc." />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="returnsDescription" className="block text-sm font-medium text-blackbrown mb-1.5">Returns Description</label>
+              <textarea id="returnsDescription" name="returnsDescription" value={nftMeta.returnsDescription} onChange={handleInputChange} rows={2} className={inputClass} placeholder="Return policy and conditions" />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="artisanStory" className="block text-sm font-medium text-blackbrown mb-1.5">Artisan Story</label>
+              <textarea id="artisanStory" name="artisanStory" value={nftMeta.artisanStory} onChange={handleInputChange} rows={4} className={inputClass} placeholder="Story behind the piece and the artisan" />
+            </div>
+          </SectionCard>
+        )}
+
         <SectionCard title="Description" icon={FiFileText}>
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-blackbrown mb-1.5">Description</label>
@@ -622,66 +720,75 @@ function NFTForm({ onSubmit }: NFTFormProps) {
           </div>
         </SectionCard>
 
-        <SectionCard title="Community Utility & Perks" icon={FiCheckSquare} fullWidth>
-          <p className="text-sm text-lightbrown mb-4">Select all perks this NFT grants. These appear on the NFT card.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {COMMUNITY_PERKS_OPTIONS.map((perk) => (
-              <label key={perk} className="flex items-center gap-3 cursor-pointer p-3 border border-secondarybrown/20 bg-primary hover:border-secondarybrown/40 transition-all duration-200 has-[:checked]:border-secondarybrown/50 has-[:checked]:bg-secondarybrown/10">
-                <input type="checkbox" checked={nftMeta.communityPerks.includes(perk)} onChange={() => handlePerkToggle(perk)} className="h-4 w-4 border-secondarybrown/40 accent-secondarybrown text-secondarybrown focus:ring-2 focus:ring-secondarybrown/40" />
-                <span className="text-sm font-medium text-blackbrown">{perk}</span>
-              </label>
-            ))}
-          </div>
-        </SectionCard>
-
-        <SectionCard title="Source Reference" icon={FiBook}>
-          <div>
-            <label htmlFor="sourceReference" className="block text-sm font-medium text-blackbrown mb-1.5">Source Reference / Citation</label>
-            <div className="relative">
-              <FiBook className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
-              <input value={nftMeta.sourceReference} type="text" id="sourceReference" name="sourceReference" onChange={handleInputChange} className={inputClass + ' pl-9'} placeholder="e.g. Museum catalog, publication" />
+        <div className={isProductNft ? 'opacity-60 pointer-events-none select-none' : ''}>
+          <SectionCard title="Community Utility & Perks" icon={FiCheckSquare} fullWidth>
+            <p className="text-sm text-lightbrown mb-4">Select all perks this NFT grants. These appear on the NFT card.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {COMMUNITY_PERKS_OPTIONS.map((perk) => (
+                <label key={perk} className="flex items-center gap-3 cursor-pointer p-3 border border-secondarybrown/20 bg-primary hover:border-secondarybrown/40 transition-all duration-200 has-[:checked]:border-secondarybrown/50 has-[:checked]:bg-secondarybrown/10">
+                  <input type="checkbox" checked={nftMeta.communityPerks.includes(perk)} onChange={() => handlePerkToggle(perk)} disabled={isProductNft} className="h-4 w-4 border-secondarybrown/40 accent-secondarybrown text-secondarybrown focus:ring-2 focus:ring-secondarybrown/40" />
+                  <span className="text-sm font-medium text-blackbrown">{perk}</span>
+                </label>
+              ))}
             </div>
-          </div>
-        </SectionCard>
+          </SectionCard>
+        </div>
 
-        <SectionCard title="Important notice" icon={FiInfo}>
-          <p className="text-sm text-darkbrown bg-secondarybrown/10 border border-secondarybrown/30 p-4 leading-relaxed">{HERITAGE_DISCLAIMER}</p>
-        </SectionCard>
-
-        <SectionCard title="Membership & Access" icon={FiUser} fullWidth>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className={isProductNft ? 'opacity-60 pointer-events-none select-none' : ''}>
+          <SectionCard title="Source Reference" icon={FiBook}>
             <div>
-              <label htmlFor="membershipLevel" className="block text-sm font-medium text-blackbrown mb-1.5">Membership Level</label>
+              <label htmlFor="sourceReference" className="block text-sm font-medium text-blackbrown mb-1.5">Source Reference / Citation</label>
               <div className="relative">
-                <select id="membershipLevel" name="membershipLevel" value={getAttr('membershipLevel')} onChange={handleAttributeChange} required className={selectClass}>
-                  <option value="">Select level</option>
-                  {MEMBERSHIP_LEVEL_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
+                <FiBook className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
+                <input value={nftMeta.sourceReference} type="text" id="sourceReference" name="sourceReference" onChange={handleInputChange} disabled={isProductNft} className={inputClass + ' pl-9'} placeholder="e.g. Museum catalog, publication" />
               </div>
             </div>
-            <div>
-              <label htmlFor="accessLevel" className="block text-sm font-medium text-blackbrown mb-1.5">Access Level</label>
-              <div className="relative">
-                <select id="accessLevel" name="accessLevel" value={getAttr('accessLevel')} onChange={handleAttributeChange} required className={selectClass}>
-                  <option value="">Select level</option>
-                  {ACCESS_LEVEL_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
+          </SectionCard>
+        </div>
+
+        <div className={isProductNft ? 'opacity-60 pointer-events-none select-none' : ''}>
+          <SectionCard title="Important notice" icon={FiInfo}>
+            <p className="text-sm text-darkbrown bg-secondarybrown/10 border border-secondarybrown/30 p-4 leading-relaxed">{HERITAGE_DISCLAIMER}</p>
+          </SectionCard>
+        </div>
+
+        <div className={isProductNft ? 'opacity-60 pointer-events-none select-none' : ''}>
+          <SectionCard title="Membership & Access" icon={FiUser} fullWidth>
+            <p className="text-sm text-lightbrown mb-4">Membership level, access level, and resource unlock score.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label htmlFor="membershipLevel" className="block text-sm font-medium text-blackbrown mb-1.5">Membership Level</label>
+                <div className="relative">
+                  <select id="membershipLevel" name="membershipLevel" value={getAttr('membershipLevel')} onChange={handleAttributeChange} required={!isProductNft} disabled={isProductNft} className={selectClass}>
+                    <option value="">Select level</option>
+                    {MEMBERSHIP_LEVEL_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="accessLevel" className="block text-sm font-medium text-blackbrown mb-1.5">Access Level</label>
+                <div className="relative">
+                  <select id="accessLevel" name="accessLevel" value={getAttr('accessLevel')} onChange={handleAttributeChange} required={!isProductNft} disabled={isProductNft} className={selectClass}>
+                    <option value="">Select level</option>
+                    {ACCESS_LEVEL_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="resourceUnlockScore" className="block text-sm font-medium text-blackbrown mb-1.5">Resource Unlock Score</label>
+                <div className="relative">
+                  <select id="resourceUnlockScore" name="resourceUnlockScore" value={getAttr('resourceUnlockScore')} onChange={handleAttributeChange} required={!isProductNft} disabled={isProductNft} className={selectClass}>
+                    <option value="">Select score</option>
+                    {RESOURCE_UNLOCK_SCORE_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
+                </div>
               </div>
             </div>
-            <div>
-              <label htmlFor="resourceUnlockScore" className="block text-sm font-medium text-blackbrown mb-1.5">Resource Unlock Score</label>
-              <div className="relative">
-                <select id="resourceUnlockScore" name="resourceUnlockScore" value={getAttr('resourceUnlockScore')} onChange={handleAttributeChange} required className={selectClass}>
-                  <option value="">Select score</option>
-                  {RESOURCE_UNLOCK_SCORE_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-lightbrown pointer-events-none" />
-              </div>
-            </div>
-          </div>
-        </SectionCard>
+          </SectionCard>
+        </div>
 
         <div className="lg:col-span-2 bg-primary border border-secondarybrown/20 p-6 sm:p-7">
           <button

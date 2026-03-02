@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import Mint from '@/components/NFTPage/Mint'
 import AboutNft from '@/components/NFTPage/AboutNft'
 import QandA from '@/components/NFTPage/QandA'
@@ -32,12 +33,10 @@ function page() {
                                 Experience the beauty of authentic Sri Lankan handicrafts, secured with NFTs for tamper-proof authenticity, cultural storytelling, and lifetime artisan royalties. Invest, collect, and preserve tradition while supporting local creators.
                             </p>
                             <div className='flex flex-col sm:flex-row gap-4 justify-start items-start'>
-                                <button className='bg-secondarybrown text-primary py-3 px-8 rounded hover:bg-secondarybrown/90 transition-colors font-semibold'>
+                                <Link href='/NftHandycraft' className='bg-secondarybrown text-primary py-3 px-8 rounded hover:bg-secondarybrown/90 transition-colors font-semibold inline-block'>
                                     Invest Now
-                                </button>
-                                <button className='bg-transparent border border-primary text-primary py-3 px-8 rounded hover:bg-primary hover:text-blackbrown transition-colors font-semibold'>
-                                    Explore Handicrafts
-                                </button>
+                                </Link>
+                               
                             </div>
                         </div>
                     </div>
